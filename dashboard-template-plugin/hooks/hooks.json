@@ -1,0 +1,44 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // empty' | { read fp; case \"$fp\" in src/app/api/*/route.ts) if ! echo \"$fp\" | grep -q '/api/v1/'; then echo 'API routes MUST be created under src/app/api/v1/**. Use /api/v1/<domain>/<resource>/route.ts pattern. See API-001.' >&2; exit 2; fi;; esac; }"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // empty' | { read fp; case \"$fp\" in src/features/*.ts|src/features/*.tsx|src/lib/*.ts|src/lib/*.tsx) if [ -f \"$fp\" ] && grep -qE \"from ['\\\"]@/app/\" \"$fp\" 2>/dev/null; then echo '[ARCH-002] features/ and lib/ MUST NOT import from @/app/**. Dependency direction: app -> features -> lib (never reverse).' >&2; exit 2; fi;; esac; }"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // empty' | { read fp; case \"$fp\" in src/app/api/*/route.ts) if ! echo \"$fp\" | grep -q '/api/v1/'; then echo '[API-001] WARNING: API route is NOT under /api/v1/**. Move to src/app/api/v1/<domain>/<resource>/route.ts' >&2; fi;; esac; }"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // empty' | { read fp; case \"$fp\" in *.sql) if [ -f \"$fp\" ] && grep -q 'auth\\.uid()' \"$fp\" 2>/dev/null && ! grep -q '(select auth\\.uid())' \"$fp\" 2>/dev/null; then echo '[SB-003] WARNING: RLS policy uses bare auth.uid(). MUST use (select auth.uid()) pattern for performance.' >&2; fi;; esac; }"
+          }
+        ]
+      }
+    ]
+  }
+}
