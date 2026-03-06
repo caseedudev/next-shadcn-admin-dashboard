@@ -66,6 +66,14 @@
 - `src/lib/supabase/client.ts`
   - 브라우저용 Supabase 클라이언트 팩토리
 
+## Supabase CLI 설정
+- `supabase/config.toml`
+  - `supabase init`으로 생성된 CLI 설정
+  - 로컬 개발 환경 구성: `supabase start`로 Docker 기반 로컬 DB/Auth 실행 가능
+  - 마이그레이션 관리: `supabase migration new`, `supabase db reset`
+- `.env.local.example`
+  - 로컬 Supabase 환경변수 템플릿 (NEXT_PUBLIC_SUPABASE_URL, DATABASE_URL 등)
+
 ## Drizzle ORM 보조 계층
 - `src/lib/drizzle/env.ts`
   - `DATABASE_URL` 환경변수 검증
@@ -140,6 +148,10 @@
 - `docs/architecture/development-rules.md`
 - `docs/architecture/nextjs-best-case-rules.md`
 - `docs/architecture/current-implemented-structure.md`
+- `docs/guides/context7-setup.md`
+- `docs/guides/supabase-local-dev.md`
+- `docs/plans/2026-03-06-drizzle-orm-adoption.md`
+- `docs/plans/2026-03-06-project-supplements-design.md`
 
 ## Turborepo 전환 관점에서의 현재 상태
 - 준비된 점:
@@ -151,3 +163,9 @@
   - `src/features/*` 도메인 계층 분리 강화
   - UI/도메인/인프라 import 경계 lint 규칙 도입
   - Drizzle 스키마와 Supabase 마이그레이션 간 동기화 자동 검증 도입
+
+## 플러그인 스킬 확장
+- `project-init` 스킬 추가
+  - `docs/domain/glossary.md` 또는 `docs/domain/project.md` 부재 시 인터뷰 기반 생성 워크플로우 실행
+  - `fullstack-dev` 에이전트가 도메인 문서를 참조하여 코드 네이밍 일관성 유지
+- `/tem:init-project` 커맨드로 수동 실행 가능
