@@ -83,7 +83,7 @@ cp .env.example .env.local
 | **폼/검증** | React Hook Form, Zod |
 | **상태 관리** | TanStack Query (서버 상태), Zustand (UI 전역 상태) |
 | **테이블/데이터** | TanStack Table |
-| **백엔드** | Route Handler (`/api/v1/**`), Supabase Auth + Postgres + RLS |
+| **백엔드** | Route Handler (`/api/v1/**`), Supabase Auth + Postgres + RLS, Drizzle ORM (복잡 쿼리) |
 | **도구/DX** | Biome, Husky |
 
 ---
@@ -137,11 +137,13 @@ src/
 ├── features/                     # 도메인별 비즈니스 로직
 │   └── <domain>/                # types, service, queries, constants
 ├── lib/                          # 외부 연동/인프라
-│   └── supabase/                # 서버/브라우저 클라이언트, 환경변수
+│   ├── supabase/                # 서버/브라우저 클라이언트, 환경변수
+│   └── drizzle/                 # Drizzle ORM (복잡 쿼리 보조 계층)
 ├── proxy.ts                      # 세션 라우팅 가드 (미들웨어)
 supabase/
 ├── migrations/                   # DB 스키마 마이그레이션 (단일 진실 공급원)
 └── seeds/                        # 시드 데이터
+drizzle.config.ts                 # Drizzle Kit 설정 (introspect 전용)
 docs/architecture/                # 아키텍처 규칙 문서
 dashboard-template-plugin/        # Claude Code 플러그인
 tests/                            # 계약 테스트
@@ -238,6 +240,7 @@ claude --plugin-dir ./dashboard-template-plugin
 | `/tem:new-api <도메인>/<리소스>` | `/api/v1/` 하위에 API 라우트 스캐폴딩 |
 | `/tem:new-feature <도메인>` | `src/features/` 하위에 피처 디렉토리 스캐폴딩 |
 | `/tem:new-migration <설명>` | Supabase 마이그레이션 파일 스캐폴딩 |
+| `/tem:init-project` | 프로젝트 초기화 — 도메인 용어집 + 프로젝트 개관 문서 생성 |
 
 ### 에이전트
 
@@ -254,6 +257,7 @@ claude --plugin-dir ./dashboard-template-plugin
 | `frontend-dev` | React 컴포넌트, Next.js 페이지, UI 코드 작업 시 |
 | `backend-dev` | API 라우트, Supabase, SQL, 마이그레이션 작업 시 |
 | `fullstack-review` | PR 리뷰, 코드 리뷰 시 |
+| `project-init` | 프로젝트 초기화 시 또는 도메인 문서 부재 감지 시 |
 
 ### 자동 가드레일 (훅)
 
@@ -314,6 +318,18 @@ npm run dev
 cp .env.example .env.local
 ```
 
+**로컬 Supabase 환경이 필요한 경우:**
+
+로컬에서 Supabase를 실행하려면 [로컬 개발 가이드](docs/guides/supabase-local-dev.md)를 참고하세요.
+
+```bash
+# 로컬 Supabase 시작 (Docker 필요)
+supabase start
+
+# 로컬 환경변수 설정
+cp .env.local.example .env.local
+```
+
 ---
 
 ## 포맷팅 및 린트
@@ -337,6 +353,15 @@ npx @biomejs/biome check --write
 | [Supabase/Route 패턴 + 모노레포 가이드](docs/architecture/supabase-route-and-monorepo-guide.md) | DB 패턴, 모노레포 전환 규칙 |
 | [Turborepo 도입 규칙](docs/architecture/turborepo-adoption-rules.md) | 도입 트리거, 전환 규칙 |
 | [현재 구현 구조 스냅샷](docs/architecture/current-implemented-structure.md) | 실제 반영된 구조 기록 |
+
+---
+
+## 가이드 문서
+
+| 문서 | 내용 |
+|------|------|
+| [Context7 MCP 설정](docs/guides/context7-setup.md) | 최신 라이브러리 문서 실시간 조회 설정 |
+| [Supabase 로컬 개발](docs/guides/supabase-local-dev.md) | Docker 기반 로컬 Supabase 환경 구축 |
 
 ---
 
