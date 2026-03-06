@@ -7,6 +7,7 @@ import { AppSidebar } from "@/app/(main)/dashboard/_components/sidebar/app-sideb
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { SIDEBAR_COLLAPSIBLE_VALUES, SIDEBAR_VARIANT_VALUES } from "@/lib/preferences/layout";
+import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 import { getPreference } from "@/server/server-actions";
@@ -16,37 +17,49 @@ import { LayoutControls } from "./_components/sidebar/layout-controls";
 import { SearchDialog } from "./_components/sidebar/search-dialog";
 import { ThemeSwitcher } from "./_components/sidebar/theme-switcher";
 
+const DEMO_USER = {
+  id: "demo",
+  name: "Demo User",
+  email: "demo@example.com",
+  avatar: "",
+  role: "owner",
+};
+
 export default async function Layout({ children }: Readonly<{ children: ReactNode }>) {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
+  let currentUser = DEMO_USER;
 
-  if (authError || !user) {
-    redirect("/auth/v1/login?next=/dashboard/default");
+  if (isSupabaseConfigured()) {
+    const supabase = await createSupabaseServerClient();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      redirect("/auth/v1/login?next=/dashboard/default");
+    }
+
+    const { data: member, error: memberError } = await supabase
+      .from("academy_members")
+      .select("academy_id, role")
+      .eq("user_id", user.id)
+      .in("role", ["owner", "manager", "staff"])
+      .order("created_at", { ascending: true })
+      .limit(1)
+      .maybeSingle();
+
+    if (memberError || !member) {
+      redirect("/unauthorized");
+    }
+
+    currentUser = {
+      id: user.id,
+      name: (user.user_metadata?.full_name as string | undefined) ?? user.email?.split("@")[0] ?? "User",
+      email: user.email ?? "",
+      avatar: (user.user_metadata?.avatar_url as string | undefined) ?? "",
+      role: member.role,
+    };
   }
-
-  const { data: member, error: memberError } = await supabase
-    .from("academy_members")
-    .select("academy_id, role")
-    .eq("user_id", user.id)
-    .in("role", ["owner", "manager", "staff"])
-    .order("created_at", { ascending: true })
-    .limit(1)
-    .maybeSingle();
-
-  if (memberError || !member) {
-    redirect("/unauthorized");
-  }
-
-  const currentUser = {
-    id: user.id,
-    name: (user.user_metadata?.full_name as string | undefined) ?? user.email?.split("@")[0] ?? "User",
-    email: user.email ?? "",
-    avatar: (user.user_metadata?.avatar_url as string | undefined) ?? "",
-    role: member.role,
-  };
 
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar_state")?.value !== "false";

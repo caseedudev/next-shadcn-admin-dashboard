@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 
 import { createServerClient } from "@supabase/ssr";
 
-import { getPublicSupabaseEnv } from "@/lib/supabase/env";
+import { getPublicSupabaseEnv, isSupabaseConfigured } from "@/lib/supabase/env";
 
 function copyCookies(target: NextResponse, source: NextResponse) {
   for (const cookie of source.cookies.getAll()) {
@@ -11,6 +11,10 @@ function copyCookies(target: NextResponse, source: NextResponse) {
 }
 
 export async function proxy(request: NextRequest) {
+  if (!isSupabaseConfigured()) {
+    return NextResponse.next({ request });
+  }
+
   const { url, anonKey } = getPublicSupabaseEnv();
   let supabaseResponse = NextResponse.next({ request });
 

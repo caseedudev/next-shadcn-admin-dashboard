@@ -3,6 +3,10 @@ type PublicSupabaseEnv = {
   anonKey: string;
 };
 
+export function isSupabaseConfigured(): boolean {
+  return !!(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+}
+
 function readRequiredEnv(key: "NEXT_PUBLIC_SUPABASE_URL" | "NEXT_PUBLIC_SUPABASE_ANON_KEY"): string {
   const value = process.env[key];
   if (!value) {
