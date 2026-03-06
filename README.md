@@ -213,6 +213,19 @@ app  →  features  →  lib
 
 ---
 
+## 🤖 Codex CLI 지원
+
+이 프로젝트에는 OpenAI Codex CLI용 `AGENTS.md`가 포함되어 있습니다. Codex CLI로 작업하면 위의 아키텍처 규칙(PERF, COMP, UI, API, SB, DATA)이 자동으로 시스템 프롬프트에 주입됩니다.
+
+```bash
+# Codex CLI 실행 시 AGENTS.md가 자동 로드됨
+codex
+```
+
+> AGENTS.md는 MUST 등급 규칙 + 코드 예제 + Boundaries(Must/Must Not) 섹션으로 구성되어 있습니다.
+
+---
+
 ## 🔌 Claude Code 플러그인
 
 이 프로젝트에는 **dashboard-template-plugin**이 포함되어 있습니다. Claude Code에서 이 플러그인을 활성화하면 위의 아키텍처 규칙이 개발 작업에 자동으로 적용됩니다.

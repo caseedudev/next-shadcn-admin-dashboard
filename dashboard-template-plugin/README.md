@@ -104,15 +104,17 @@ cp -r dashboard-template-plugin /path/to/other-project/
 
 ### 2. 에이전트 (Agents) — 전문화된 서브 에이전트
 
-| 에이전트 | 역할 | 도구 권한 |
-|---------|------|----------|
-| `frontend-architect` | 프론트엔드 코드 리뷰 (읽기 전용) | Read, Grep, Glob, Bash |
-| `backend-architect` | 백엔드 코드 리뷰 (읽기 전용) | Read, Grep, Glob, Bash |
-| `fullstack-dev` | 기능 구현 (전체 규칙 적용, 기본 에이전트) | 모든 도구 |
+| 에이전트 | 역할 | 도구 권한 | 색상 |
+|---------|------|----------|------|
+| `frontend-architect` | 프론트엔드 코드 리뷰 (읽기 전용) | `["Read", "Grep", "Glob", "Bash"]` | `cyan` |
+| `backend-architect` | 백엔드 코드 리뷰 (읽기 전용) | `["Read", "Grep", "Glob", "Bash"]` | `yellow` |
+| `fullstack-dev` | 기능 구현 (전체 규칙 적용, 기본 에이전트) | 모든 도구 | `green` |
 
 **읽기 전용 에이전트**: `frontend-architect`와 `backend-architect`는 코드를 수정하지 않고 리뷰만 수행한다. 안전하게 리뷰를 위임할 수 있다.
 
 **기본 에이전트**: `settings.json`에 의해 `fullstack-dev`가 기본 에이전트로 설정되어, 플러그인 활성화 시 모든 작업에 아키텍처 규칙이 자동 적용된다.
+
+**에이전트 트리거**: 각 에이전트의 `description`에 `<example>` 블록이 포함되어 있어, Claude Code가 작업 컨텍스트에 맞는 에이전트를 자동으로 선택한다.
 
 ### 3. 슬래시 명령 (Slash Commands)
 
