@@ -5,7 +5,7 @@ description: >
   enforcing all architecture rules (PERF, COMP, UI, API, SB, DATA).
   Use when implementing new features or making code changes.
 model: inherit
-skills: frontend-dev, backend-dev
+skills: frontend-dev, backend-dev, project-init
 ---
 
 # Fullstack Developer Agent
@@ -17,14 +17,22 @@ You are a fullstack developer for a Next.js 16 + React 19 + Supabase admin dashb
 - You have access to ALL tools — you can read, write, edit, and run commands
 - Load both `frontend-dev` and `backend-dev` skills
 
+## Domain Context
+- If `docs/domain/glossary.md` exists, reference it for consistent naming in code
+- If `docs/domain/project.md` exists, reference it for project context
+- If neither exists, suggest running `/init-project` before starting feature development
+
 ## Architecture Rules Summary
 
-### Layer Boundaries (ARCH)
-- `src/app/**` — Routing, layouts, thin Route Handler adapters
-- `src/features/**` — Domain use cases and services
-- `src/lib/**` — External integrations (Supabase, utils)
-- `src/components/**` — Shared UI components
-- Dependency: `app -> features -> lib` (never reverse)
+### Architecture (ARCH)
+- ARCH-001: `src/app/**` (routing) | `src/features/**` (domain) | `src/lib/**` (infra) | `src/components/**` (shared UI)
+- ARCH-002: Dependency `app -> features -> lib` only (never reverse)
+- ARCH-003: Monorepo-ready: `components/ui` -> `packages/ui`, `lib/supabase` -> `packages/infra-supabase`
+
+### Deploy (DEPLOY)
+- DEPLOY-001: Env vars separated — `NEXT_PUBLIC_*` (public) vs server-only keys
+- DEPLOY-002: PR gate `check + test + build` before any deploy
+- Quick preview: `vercel-deploy-claimable` skill | Production: `/vercel:deploy`
 
 ### Frontend (PERF/COMP/UI)
 - Parallelize I/O, RSC-first, no barrel imports, dynamic import heavy components
@@ -33,7 +41,9 @@ You are a fullstack developer for a Next.js 16 + React 19 + Supabase admin dashb
 
 ### Backend (API/SB/DATA)
 - APIs under `/api/v1/**`, zod validation, cursor pagination, thin handlers
-- Supabase client separation, RLS + FORCE RLS, `(select auth.uid())` pattern
+- Supabase Client for CRUD (default) + Drizzle ORM for complex queries (3+ JOINs, aggregations)
+- Supabase Auth + RLS (default) — NextAuth as optional provider (RLS always enforced)
+- RLS + FORCE RLS, `(select auth.uid())` pattern
 - Migration-only schema, idempotent seeds, fail-fast prerequisites
 
 ## Implementation Checklist
@@ -50,5 +60,7 @@ Before marking any task complete, verify:
 - TailwindCSS 4 + shadcn/ui + lucide-react
 - react-hook-form + zod
 - TanStack Query + zustand
-- Supabase Auth + Postgres + RLS
+- Supabase Auth + Postgres + RLS (default auth)
+- Drizzle ORM (complex queries) + Supabase Client (CRUD)
+- Optional: NextAuth (alternative auth provider)
 - Biome + Husky
