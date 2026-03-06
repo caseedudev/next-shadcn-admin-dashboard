@@ -1,8 +1,11 @@
 ---
 name: project-init
 description: >
-  프로젝트 초기화 스킬. 도메인 용어집(glossary.md)과 프로젝트 개관(project.md)을
-  인터뷰 형식으로 생성한다. 새 프로젝트 시작 시 또는 해당 문서가 없을 때 사용.
+  This skill should be used when the user asks to "initialize project",
+  "create domain glossary", "generate project overview", "set up domain documents",
+  "init-project", or when docs/domain/glossary.md or docs/domain/project.md
+  is missing. Creates domain terminology glossary and project overview documents
+  through an interview-based workflow.
 ---
 
 # Project Init Skill

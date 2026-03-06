@@ -20,7 +20,8 @@ Source: `docs/architecture/development-rules.md` Section 13, `docs/architecture/
 4. [ ] Components use composition/variants instead of boolean prop branching? (COMP-001)
 5. [ ] Forms/buttons/focus/motion meet accessibility rules? (UI-001~003)
 6. [ ] Supabase RLS/FK/indexes/policies in migration? (SB-003, DATA-005)
-7. [ ] Prisma/NextAuth usage within defined boundaries? (DATA-003, DATA-004)
+7. [ ] Drizzle ORM used only for complex queries (3+ JOINs, aggregations), with authorization verified at service layer? (DATA-003)
+8. [ ] If NextAuth is used, RLS still enforces all data access and user sync is documented? (DATA-004)
 8. [ ] Storybook scenarios (default/loading/empty/error) exist? (DS-002)
 9. [ ] PostHog events follow domain naming, no PII? (OBS-001)
 10. [ ] Tests pass (`check`, `test`, `build`)? (QA-001, QA-002)
@@ -60,8 +61,14 @@ Source: `docs/architecture/development-rules.md` Section 13, `docs/architecture/
 
 ## Architecture Checklist
 
-1. [ ] Dependency direction: `app -> features -> lib` (no reverse imports)? (ARCH-002)
-2. [ ] Code maintains monorepo-portable boundaries? (ARCH-003)
+1. [ ] Layer boundaries respected (`app`/`features`/`lib`/`components`)? (ARCH-001)
+2. [ ] Dependency direction: `app -> features -> lib` (no reverse imports)? (ARCH-002)
+3. [ ] Code maintains monorepo-portable boundaries? (ARCH-003)
+
+## Deploy Checklist
+
+1. [ ] Environment variables separated by role (`NEXT_PUBLIC_*` vs server-only)? (DEPLOY-001)
+2. [ ] PR gate `check + test + build` passes? (DEPLOY-002)
 
 ## Review Priority
 

@@ -70,20 +70,47 @@ Final authority for user data access is Supabase RLS policies. App-level guards 
 
 User-facing CRUD uses Supabase server client + RLS. Input via `zod.safeParse`, errors via 400/401/403/500.
 
-## DATA-003 Prisma Usage Boundary (MUST)
+## DATA-003 Complex Query Layer — Drizzle ORM (MUST)
 
-Prisma is limited to:
-- Internal admin/ops APIs
-- Background jobs/batch processing
-- Complex reports not dependent on RLS
+Supabase Client is the default for all CRUD operations (RLS auto-applied). Use Drizzle ORM when:
+- Queries involve 3+ JOINs, window functions, or subqueries
+- Aggregation/reporting queries where compile-time type safety matters
+- Performance-critical queries needing fine-grained SQL control
+- Edge Runtime compatibility is required
 
-Public APIs using Prisma directly require ADR documenting the authorization gap.
+```typescript
+// Default: Supabase Client (CRUD with RLS)
+const { data } = await supabase.from('students').select('id, name')
 
-## DATA-004 NextAuth Usage Boundary (MUST)
+// Drizzle ORM: Complex queries (type-safe SQL)
+const result = await db
+  .select({
+    userId: users.id,
+    totalEnrollments: sql<number>`count(*)`.as('total'),
+    rank: sql<number>`row_number() over (order by count(*) desc)`,
+  })
+  .from(users)
+  .leftJoin(enrollments, eq(users.id, enrollments.userId))
+  .groupBy(users.id)
+```
 
-- NextAuth only for social login extension (OAuth providers).
-- NextAuth sessions do NOT replace Supabase RLS.
-- User identifier sync rules must be documented when introduced.
+Drizzle queries bypass RLS — ensure authorization is verified at the service layer before executing.
+
+## DATA-004 Auth Provider Selection (MUST)
+
+Default: **Supabase Auth**. Optional replacement: **NextAuth**.
+
+- When using NextAuth, Supabase RLS must still enforce all data access control.
+- NextAuth user sessions must be synced to Supabase `auth.users` for RLS to function.
+- Document user identifier sync rules in ADR when switching to NextAuth.
+
+```
+Auth Provider (swappable)         DB Access Control (always enforced)
+┌─────────────────────┐           ┌─────────────────────┐
+│ Supabase Auth (기본)  │──────────▶│ Supabase Postgres    │
+│ NextAuth (선택)       │──────────▶│ + RLS (최종 권한)     │
+└─────────────────────┘           └─────────────────────┘
+```
 
 ## DATA-005 Schema/Migration Principle (MUST)
 

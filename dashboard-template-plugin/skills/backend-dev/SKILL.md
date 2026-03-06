@@ -1,19 +1,15 @@
 ---
 name: backend-dev
 description: >
-  Backend development skill for Supabase + Next.js API routes.
-  Use when working on API routes, route handlers, Supabase, migrations,
-  RLS policies, database schema, SQL, seed scripts, zod validation,
-  or server-side data access. Enforces API, SB, DATA rules automatically.
+  This skill should be used when the user asks to "create API routes",
+  "write route handlers", "add Supabase migration", "configure RLS policies",
+  "write SQL queries", "set up database schema", "create seed scripts",
+  "add zod validation", "implement server-side data access", or works with
+  Supabase, Drizzle ORM, or backend architecture in this admin dashboard.
+  Enforces API, SB, DATA rules automatically.
 ---
 
 # Backend Development Skill
-
-## Purpose
-Enforce backend architecture rules when working with API routes, Supabase, database schema, and server-side logic.
-
-## External Skills to Reference
-- `supabase-postgres-best-practices` — Query performance, connection management, security/RLS, schema design, data access patterns
 
 ## Project-Specific Rules
 
@@ -35,8 +31,8 @@ See `references/supabase-rules.md` for full details.
 See `references/supabase-rules.md` for full details.
 - DATA-001: Final authority for data access is Supabase RLS (MUST)
 - DATA-002: User CRUD goes through Supabase server client + RLS (MUST)
-- DATA-003: Prisma limited to internal ops/batch/complex reports (MUST)
-- DATA-004: NextAuth only for social login extension, never replaces RLS (MUST)
+- DATA-003: Drizzle ORM for complex queries (3+ JOINs, window functions, aggregations) and reports; Supabase Client remains default for CRUD (MUST)
+- DATA-004: NextAuth as optional auth provider replacement; Supabase Auth + RLS is default. When using NextAuth, RLS must still enforce all access control (MUST)
 - DATA-005: Schema source of truth is `supabase/migrations/*.sql` (MUST)
 - DATA-006: Index WHERE/JOIN/FK columns; cursor pagination; upsert via ON CONFLICT (SHOULD)
 
@@ -45,9 +41,11 @@ See `references/migration-rules.md` for full details.
 
 ## Tech Stack
 - Next.js 16 Route Handlers (`/api/v1/**`)
-- Supabase Auth + Postgres + RLS
+- Supabase Auth + Postgres + RLS (default auth)
+- Drizzle ORM (complex queries, Edge compatible) + Supabase Client (default CRUD)
 - zod (input validation)
 - TanStack Query (client-side server state)
+- Optional: NextAuth (alternative auth provider, RLS still enforced)
 
 ## Observability Rules (OBS-001 ~ OBS-002)
 - OBS-001: Event names use domain prefix (`academy.created`, `enrollment.added`); no PII (MUST)
@@ -58,8 +56,27 @@ See `references/migration-rules.md` for full details.
 - QA-002: PR gate: `npm run check && npm run test && npm run build` must pass (MUST)
 - QA-003: Auth/permission/DB policy changes always require docs + tests (MUST)
 
-## Architecture Boundaries
-- Route Handlers: thin adapters only (validate + auth + delegate)
-- Domain logic: `src/features/<domain>/`
-- Infrastructure: `src/lib/supabase/` (server.ts, client.ts, env.ts)
-- Dependency direction: `app -> features -> lib`
+## Architecture Rules (ARCH-001 ~ ARCH-003)
+- ARCH-001: Layer boundaries (MUST)
+  - `src/app/**` — Routing, HTTP entry points, layouts
+  - `src/features/**` — Domain logic
+  - `src/lib/**` — External integrations/infrastructure (Supabase, storage, util)
+- ARCH-002: Dependency direction `app -> features -> lib` only (MUST)
+  - Forbidden: `features -> app`, `lib -> app`, domain code referencing specific pages/routes
+- ARCH-003: Monorepo-ready placement (MUST)
+  - `src/components/ui/*` -> future `packages/ui`
+  - `src/lib/supabase/*` -> future `packages/infra-supabase`
+  - `src/features/*` -> future `packages/domain-*`
+
+## Deploy Rules (DEPLOY)
+- DEPLOY-001: Environment variables separated by role (MUST)
+  - Public: `NEXT_PUBLIC_*` only
+  - Server-only: `SUPABASE_SERVICE_ROLE_KEY` etc. — never expose to client
+- DEPLOY-002: PR gate `check + test + build` must pass before deploy (MUST)
+- Deploy methods:
+  - Quick preview: `vercel-deploy-claimable` skill (no auth required)
+  - Production: `vercel` plugin (`/vercel:deploy`) with authenticated Vercel CLI
+
+## Required External Skills
+Actively consult when writing or reviewing backend code:
+- `supabase-postgres-best-practices` — Query performance, connection management, security/RLS, schema design. Cross-reference with SB/DATA rules above.

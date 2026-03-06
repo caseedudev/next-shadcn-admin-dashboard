@@ -1,22 +1,15 @@
 ---
 name: frontend-dev
 description: >
-  Frontend development skill for Next.js 16 + React 19 admin dashboard.
-  Use when writing or modifying React components, Next.js pages, UI code,
-  styling, client/server components, TailwindCSS, shadcn/ui, or Framer Motion.
+  This skill should be used when the user asks to "write React components",
+  "create a Next.js page", "add UI components", "modify styling",
+  "use shadcn/ui", "add Framer Motion animation", "optimize React performance",
+  "fix accessibility issues", or works with TailwindCSS, client/server components,
+  or frontend architecture in this Next.js 16 + React 19 admin dashboard.
   Enforces PERF, COMP, UI rules automatically.
 ---
 
 # Frontend Development Skill
-
-## Purpose
-Enforce frontend architecture rules when writing or modifying React/Next.js code in this admin dashboard template.
-
-## External Skills to Reference
-When working on frontend code, also consult these external skills for detailed rule files:
-- `vercel-react-best-practices` — 58 performance rules (async, bundle, server, rerender)
-- `vercel-composition-patterns` — Component architecture, state management, React 19 APIs
-- `web-design-guidelines` — Fetch latest from https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/main/command.md
 
 ## Project-Specific Rules
 
@@ -60,9 +53,21 @@ See `references/ui-rules.md` for full details.
 - DS-002: Minimum scenarios: `default`, `loading`, `empty`, `error`, `long-content` (MUST)
 - DS-003: Include keyboard navigation, focus, reduced-motion stories (SHOULD)
 
-## Architecture Boundaries
-- `src/app/**` — Routing, layouts, thin adapters
-- `src/features/**` — Domain logic
-- `src/lib/**` — Infrastructure (Supabase, utils)
-- `src/components/**` — Shared UI components
-- Dependency direction: `app -> features -> lib` (never reverse)
+## Architecture Rules (ARCH-001 ~ ARCH-003)
+- ARCH-001: Layer boundaries (MUST)
+  - `src/app/**` — Routing, layouts, thin adapters
+  - `src/features/**` — Domain logic
+  - `src/lib/**` — Infrastructure (Supabase, utils)
+  - `src/components/**` — Shared UI components
+- ARCH-002: Dependency direction `app -> features -> lib` only (MUST)
+  - Forbidden: `features -> app`, `lib -> app`, domain code referencing specific pages/routes
+- ARCH-003: Monorepo-ready placement (MUST)
+  - `src/components/ui/*` -> future `packages/ui`
+  - `src/lib/supabase/*` -> future `packages/infra-supabase`
+  - `src/features/*` -> future `packages/domain-*`
+
+## Required External Skills
+Actively consult these skills when writing or reviewing frontend code:
+- `vercel-react-best-practices` — 58 performance rules (async, bundle, server, rerender). Cross-reference with PERF rules above.
+- `vercel-composition-patterns` — Component architecture, state management, React 19 APIs. Cross-reference with COMP rules above.
+- `web-design-guidelines` — Accessibility, UX quality, interface design principles. Cross-reference with UI rules above.

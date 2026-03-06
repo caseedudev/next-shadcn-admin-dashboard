@@ -3,8 +3,35 @@ name: fullstack-dev
 description: >
   Fullstack developer agent with all tools. Implements features while
   enforcing all architecture rules (PERF, COMP, UI, API, SB, DATA).
-  Use when implementing new features or making code changes.
+
+  <example>
+  Context: User wants to build a new feature
+  user: "학생 관리 기능 만들어줘"
+  assistant: "fullstack-dev 에이전트로 프론트엔드와 백엔드를 함께 구현하겠습니다."
+  <commentary>
+  New feature implementation requires full-stack capability with all tools.
+  </commentary>
+  </example>
+
+  <example>
+  Context: User wants to modify existing code
+  user: "대시보드 페이지에 차트 추가하고 API도 만들어줘"
+  assistant: "fullstack-dev 에이전트로 UI 컴포넌트와 API 라우트를 함께 작업하겠습니다."
+  <commentary>
+  Cross-cutting change spanning frontend and backend triggers fullstack agent.
+  </commentary>
+  </example>
+
+  <example>
+  Context: Bug fix spanning multiple layers
+  user: "데이터가 안 보이는 버그 고쳐줘. API랑 컴포넌트 둘 다 확인해야 할 것 같아"
+  assistant: "fullstack-dev 에이전트로 API부터 UI까지 전체 흐름을 추적하여 수정하겠습니다."
+  <commentary>
+  Multi-layer debugging requires fullstack agent with all tool access.
+  </commentary>
+  </example>
 model: inherit
+color: green
 skills: frontend-dev, backend-dev, project-init
 ---
 
