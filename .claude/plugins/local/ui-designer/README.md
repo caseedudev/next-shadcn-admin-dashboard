@@ -16,6 +16,8 @@ UI 페이지 설계 및 구현을 위한 Claude Code 플러그인.
 
 ## 설치
 
+### Claude Code
+
 ```bash
 bash .claude/plugins/local/ui-designer/install.sh
 ```
@@ -26,6 +28,22 @@ bash .claude/plugins/local/ui-designer/install.sh
 - `agents/` — 서브 에이전트 (3개)
 
 설치 후 Claude Code를 재시작하면 적용된다.
+
+### Antigravity (선택적)
+
+```bash
+bash .claude/plugins/local/ui-designer/install-antigravity.sh
+```
+
+프로젝트 `.github/skills/`에 스킬 3개 설치.
+
+### Codex (선택적)
+
+```bash
+bash .claude/plugins/local/ui-designer/install-codex.sh
+```
+
+`~/.codex/prompts/`에 커맨드 3개 설치.
 
 ### 제거
 
