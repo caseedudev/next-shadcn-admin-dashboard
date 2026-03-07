@@ -2,7 +2,7 @@
 
 ## 목표
 
-dashboard-template-plugin의 아키텍처 규칙을 Codex CLI가 자동 로드하는 AGENTS.md로 변환
+dashboard-template 플러그인의 아키텍처 규칙을 Codex CLI가 자동 로드하는 AGENTS.md로 변환
 
 ## 접근 방식
 

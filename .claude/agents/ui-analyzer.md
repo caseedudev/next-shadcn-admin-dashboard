@@ -1,0 +1,1 @@
+../plugins/local/ui-designer/agents/ui-analyzer.md

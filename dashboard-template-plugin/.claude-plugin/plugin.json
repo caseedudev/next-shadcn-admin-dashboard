@@ -1,8 +1,0 @@
-{
-  "name": "dashboard-template",
-  "description": "Next.js 16 + Supabase admin dashboard template plugin. Enforces architecture rules, provides code review, and scaffolding.",
-  "version": "1.1.0",
-  "author": {
-    "name": "freelife"
-  }
-}

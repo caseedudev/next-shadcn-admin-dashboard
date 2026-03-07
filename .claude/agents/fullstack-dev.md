@@ -1,0 +1,1 @@
+../plugins/local/dashboard-template/agents/fullstack-dev.md

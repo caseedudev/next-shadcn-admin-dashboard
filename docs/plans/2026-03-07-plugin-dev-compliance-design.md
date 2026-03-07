@@ -2,7 +2,7 @@
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
-**Goal:** dashboard-template-plugin을 공식 plugin-dev 규격에 맞게 보완
+**Goal:** dashboard-template 플러그인을 공식 plugin-dev 규격에 맞게 보완
 
 **Architecture:** Agent frontmatter 보완 → Skill description 보완 → Skill 본문/version → Command name 필드
 
@@ -14,7 +14,7 @@
 
 ### Task 1: Agent frontmatter 보완 — frontend-architect.md
 
-**Files:** Modify: `dashboard-template-plugin/agents/frontend-architect.md`
+**Files:** Modify: `.claude/plugins/local/dashboard-template/agents/frontend-architect.md`
 
 - `color: cyan` 추가
 - `tools: Read, Grep, Glob, Bash` → `tools: ["Read", "Grep", "Glob", "Bash"]`
@@ -23,7 +23,7 @@
 
 ### Task 2: Agent frontmatter 보완 — backend-architect.md
 
-**Files:** Modify: `dashboard-template-plugin/agents/backend-architect.md`
+**Files:** Modify: `.claude/plugins/local/dashboard-template/agents/backend-architect.md`
 
 - `color: yellow` 추가
 - `tools` 배열 포맷 전환
@@ -31,7 +31,7 @@
 
 ### Task 3: Agent frontmatter 보완 — fullstack-dev.md
 
-**Files:** Modify: `dashboard-template-plugin/agents/fullstack-dev.md`
+**Files:** Modify: `.claude/plugins/local/dashboard-template/agents/fullstack-dev.md`
 
 - `color: green` 추가
 - `description`에 `<example>` 블록 추가
@@ -39,10 +39,10 @@
 ### Task 4: Skill description 보완 — 4개 파일
 
 **Files:**
-- `dashboard-template-plugin/skills/frontend-dev/SKILL.md`
-- `dashboard-template-plugin/skills/backend-dev/SKILL.md`
-- `dashboard-template-plugin/skills/fullstack-review/SKILL.md`
-- `dashboard-template-plugin/skills/project-init/SKILL.md`
+- `.claude/plugins/local/dashboard-template/skills/frontend-dev/SKILL.md`
+- `.claude/plugins/local/dashboard-template/skills/backend-dev/SKILL.md`
+- `.claude/plugins/local/dashboard-template/skills/fullstack-review/SKILL.md`
+- `.claude/plugins/local/dashboard-template/skills/project-init/SKILL.md`
 
 - 3인칭 전환 + 구체적 트리거 문구 추가
 

@@ -1,0 +1,1 @@
+../../plugins/local/dashboard-template/commands/new-migration.md
