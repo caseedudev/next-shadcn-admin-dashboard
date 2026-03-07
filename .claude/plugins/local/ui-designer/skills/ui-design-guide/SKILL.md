@@ -8,7 +8,6 @@ description: >
   "대시보드 만들어줘", "로그인 페이지 만들어줘", "폼 추가해줘".
   Provides project-aware UI component recommendations, layout design, and code generation
   through an interactive Q&A workflow.
-version: 0.1.0
 ---
 
 # UI Design Guide

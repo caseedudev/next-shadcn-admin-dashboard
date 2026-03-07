@@ -1,5 +1,5 @@
 ---
-description: 프로젝트 초기화 — 도메인 용어집(glossary.md)과 프로젝트 개관(project.md) 생성
+description: "Initialize project — generate domain glossary and project overview documents"
 ---
 
 프로젝트 초기화를 시작합니다. `project-init` 스킬의 워크플로우에 따라 진행합니다.

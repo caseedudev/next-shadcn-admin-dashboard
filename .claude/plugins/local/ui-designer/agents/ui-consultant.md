@@ -8,6 +8,27 @@ description: >
   복잡한 UI 설계 분석이 필요할 때 스킬이나 /ui-design 커맨드가 내부적으로 호출한다.
   Use this agent when the user asks to "design a UI page", "recommend components",
   "create a layout plan", or when the ui-design-guide skill needs deep design analysis.
+
+  <example>
+  Context: 사용자가 대시보드 페이지 설계를 요청
+  user: "대시보드 페이지 레이아웃 설계해줘"
+  assistant: "UI consultant 에이전트를 호출하여 설계안을 생성하겠습니다."
+  <commentary>UI 페이지 설계 요청이므로 ui-consultant를 호출한다.</commentary>
+  </example>
+
+  <example>
+  Context: 사용자가 컴포넌트 추천을 요청
+  user: "설정 페이지에 어떤 컴포넌트를 쓰면 좋을까?"
+  assistant: "UI consultant 에이전트로 최적 컴포넌트 조합을 분석하겠습니다."
+  <commentary>컴포넌트 추천 요청이므로 ui-consultant를 호출한다.</commentary>
+  </example>
+
+  <example>
+  Context: User asks for layout planning
+  user: "Create a layout plan for the pricing page"
+  assistant: "I'll use the ui-consultant agent to design the layout."
+  <commentary>Layout plan request triggers ui-consultant.</commentary>
+  </example>
 ---
 
 # UI Consultant Agent

@@ -19,7 +19,7 @@
 # misc
 .DS_Store
 *.pem
-*.sh
+#*.sh
 
 # debug
 npm-debug.log*
@@ -37,7 +37,7 @@ yarn-error.log*
 next-env.d.ts
 
 # claude code
-.claude/
+#.claude/
 
 # oh-my-claudecode
 .omc/

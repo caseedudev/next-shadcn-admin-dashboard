@@ -8,6 +8,27 @@ description: >
   /ui-analyze 커맨드 또는 ui-design-guide 스킬이 호출한다.
   Use this agent when the user asks to "analyze project UI", "scan UI structure",
   or when /ui-analyze command is executed.
+
+  <example>
+  Context: 사용자가 프로젝트 UI 분석을 요청
+  user: "현재 프로젝트 UI 구조 분석해줘"
+  assistant: "UI analyzer 에이전트를 호출하여 프로젝트를 분석하겠습니다."
+  <commentary>UI 구조 분석 요청이므로 ui-analyzer를 호출한다.</commentary>
+  </example>
+
+  <example>
+  Context: 사용자가 컴포넌트 현황 파악을 요청
+  user: "지금 프로젝트에서 어떤 shadcn 컴포넌트를 쓰고 있어?"
+  assistant: "UI analyzer 에이전트로 컴포넌트 인벤토리를 스캔하겠습니다."
+  <commentary>컴포넌트 현황 파악은 UI 구조 분석에 해당한다.</commentary>
+  </example>
+
+  <example>
+  Context: User wants to scan UI structure
+  user: "Scan the project UI and generate analysis"
+  assistant: "I'll use the ui-analyzer agent to scan and analyze the project."
+  <commentary>UI scan request triggers ui-analyzer.</commentary>
+  </example>
 ---
 
 # UI Analyzer Agent
