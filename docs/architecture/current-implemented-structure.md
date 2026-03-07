@@ -168,4 +168,4 @@
 - `project-init` 스킬 추가
   - `docs/domain/glossary.md` 또는 `docs/domain/project.md` 부재 시 인터뷰 기반 생성 워크플로우 실행
   - `fullstack-dev` 에이전트가 도메인 문서를 참조하여 코드 네이밍 일관성 유지
-- `/tem:init-project` 커맨드로 수동 실행 가능
+- Codex에서는 `/dashboard-template-init-project`, Claude Code에서는 `/dashboard-template:init-project`로 수동 실행 가능

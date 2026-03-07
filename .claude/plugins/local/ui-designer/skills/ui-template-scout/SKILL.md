@@ -21,93 +21,93 @@ description: >
 
 # UI Template Scout
 
-특수 페이지 요구사항에 맞는 외부 템플릿과 블록 리소스를 탐색하고 추천하는 스킬.
+Skill for discovering and recommending external template and block resources matching special page requirements.
 
-## 트리거 조건 판별
+## Trigger Condition Evaluation
 
-다음 신호 중 하나 이상이 감지되면 이 스킬을 활성화한다.
+Activate this skill when one or more of the following signals are detected.
 
-### 강한 트리거 신호 (즉시 활성화)
+### Strong Trigger Signals (Immediate Activation)
 
-| 신호 | 예시 |
-|------|------|
-| 마케팅/세일즈 랜딩 | "SaaS 랜딩 페이지", "프로모션 페이지", "세일즈 페이지" |
-| 복합 섹션 (5개+) | "Hero + Features + Testimonials + Pricing + CTA + FAQ" |
-| 특수 인터랙션 | "애니메이션 포함", "스크롤 이펙트", "패럴랙스" |
-| 임팩트 키워드 | "화려하게", "인상적으로", "wow 효과", "임팩트 있게" |
-| 명시적 외부 요청 | "외부 템플릿 찾아줘", "shadcnblocks에서 찾아줘" |
+| Signal | Examples |
+|--------|----------|
+| Marketing/Sales landing | "SaaS landing page", "promotional page", "sales page" |
+| Complex sections (5+) | "Hero + Features + Testimonials + Pricing + CTA + FAQ" |
+| Special interactions | "with animations", "scroll effects", "parallax" |
+| Impact keywords | "화려하게", "인상적으로", "wow effect", "impressive" |
+| Explicit external request | "find external templates", "search shadcnblocks" |
 
-### 약한 트리거 신호 (판단 필요)
+### Weak Trigger Signals (Judgment Required)
 
-| 신호 | 판단 기준 |
-|------|----------|
-| 복잡한 랜딩 | 섹션 수 3-4개이지만 각각 복잡한 인터랙션 포함 |
-| 비표준 레이아웃 | page-templates.md 표준 구성으로 설계 불충분 |
-| "풀페이지" 구성 | 기존 컴포넌트 조합으로는 완성도 부족 판단 |
+| Signal | Judgment Criteria |
+|--------|-------------------|
+| Complex landing | 3-4 sections but each with complex interactions |
+| Non-standard layout | Insufficient coverage by page-templates.md standard compositions |
+| "Full-page" composition | Existing component combinations insufficient for desired quality |
 
-## 워크플로우
+## Workflow
 
-### 1단계: 트리거 감지 및 사용자 제안
+### Step 1: Trigger Detection and User Proposal
 
-특수 페이지로 판별되면 즉시 사용자에게 제안한다:
+When identified as a special page, immediately propose to the user:
 
 ```
-이 페이지는 표준 컴포넌트 조합만으로 설계하기 어려운 특수 페이지로 판단됩니다.
+This page is identified as a special page that is difficult to design with standard component combinations alone.
 
-감지된 이유: [판별 근거 1-2줄]
+Detection reason: [1-2 line rationale]
 
-외부 리소스를 리서치하면 더 완성도 높은 설계를 제안드릴 수 있습니다:
+Researching external resources can help us propose a higher-quality design:
 - Vercel Templates
 - shadcnblocks.com
 - ui.shadcn.com/blocks
 - shadcnui-blocks.com
 
-리서치를 진행할까요? (y/n)
+Proceed with research? (y/n)
 ```
 
-### 2단계: 리서치 실행 (승인 후)
+### Step 2: Execute Research (After Approval)
 
-사용자 승인 시 `ui-researcher` 에이전트를 TEMPLATE 모드로 호출한다:
+On user approval, invoke the `ui-researcher` agent in TEMPLATE mode:
 
 ```
 MODE: TEMPLATE
-REQUIREMENTS: [사용자 요구사항 요약]
-PROJECT_STACK: [analysis.json에서 로드한 기술 스택, 없으면 "Next.js + shadcn/ui + Tailwind CSS"]
-CONTEXT: [추가 컨텍스트]
+REQUIREMENTS: [user requirements summary]
+PROJECT_STACK: [tech stack from analysis.json, or "Next.js + shadcn/ui + Tailwind CSS" if unavailable]
+CONTEXT: [additional context]
 ```
 
-에이전트가 반환한 결과를 그대로 사용자에게 제시한다.
+Present the agent's returned results directly to the user.
 
-### 3단계: 결과 제시 및 다음 단계 안내
+### Step 3: Present Results and Guide Next Steps
 
-리서치 결과 제시 후:
+After presenting research results:
 
 ```
-위 리소스 중 도입할 리소스를 선택해주세요.
-선택 후 해당 리소스를 기반으로 설계안을 구체화하겠습니다.
+Please select a resource to adopt from the options above.
+We will refine the design based on the selected resource.
 
-선택지:
-  a) [1순위 리소스명] 도입
-  b) [2순위 리소스명] 도입
-  c) 복수 리소스 조합
-  d) 리서치 결과 없이 직접 설계 진행
-  e) 다시 리서치 (다른 키워드)
+Options:
+  a) Adopt [top-ranked resource name]
+  b) Adopt [second-ranked resource name]
+  c) Combine multiple resources
+  d) Proceed with direct design without research results
+  e) Re-research (different keywords)
 ```
 
-### 4단계: 선택된 리소스 기반 설계 안내
+### Step 4: Design Guidance Based on Selected Resource
 
-선택된 리소스를 바탕으로:
-- 도입 방법 (npx 명령 또는 소스 복사) 안내
-- 해당 리소스와 프로젝트 기존 스타일의 통합 포인트 설명
-- ui-designer의 설계 워크플로우로 자연스럽게 연결
+Based on the selected resource:
+- Guide adoption method (npx command or source copy)
+- Explain integration points between the resource and existing project styles
+- Seamlessly connect to the ui-designer design workflow
 
-## 거부 처리
+## Rejection Handling
 
-사용자가 리서치를 거부하면:
-- "알겠습니다. 표준 컴포넌트 조합으로 설계를 진행하겠습니다." 메시지 출력
-- 기존 ui-designer 워크플로우(Q&A → 설계안)로 자연스럽게 전환
+When the user declines research:
+- Output message: "Understood. Proceeding with design using standard component combinations."
+- Seamlessly transition to the existing ui-designer workflow (Q&A → design proposal)
 
-## 참조 문서
+## Reference Documents
 
-- `references/template-sites.md` — 사이트별 특성, 리서치 팁, 알려진 리소스 목록
-- `.ui-designer/analysis.json` — 프로젝트 기술 스택 (있는 경우 로드)
+- `references/template-sites.md` — Site characteristics, research tips, known resource catalog
+- `.ui-designer/analysis.json` — Project tech stack (loaded if available)

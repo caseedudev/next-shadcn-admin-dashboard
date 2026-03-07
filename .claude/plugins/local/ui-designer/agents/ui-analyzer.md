@@ -33,79 +33,79 @@ description: >
 
 # UI Analyzer Agent
 
-프로젝트 UI 구조를 체계적으로 분석하는 전문 에이전트.
+Specialized agent for systematically analyzing project UI structure.
 
-## 역할
+## Role
 
-현재 프로젝트의 코드베이스를 스캔하여 UI 관련 정보를 수집하고,
-구조화된 분석 결과를 `.ui-designer/analysis.json`에 저장한다.
+Scans the current project's codebase to collect UI-related information and
+saves structured analysis results to `.ui-designer/analysis.json`.
 
-## 분석 절차
+## Analysis Process
 
-### 1. 프로젝트 기본 정보
-
-```bash
-# package.json에서 기술 스택 확인
-```
-
-- Read로 `package.json` 읽기
-- 프레임워크 판별: next, react, vue 등
-- UI 라이브러리 확인: shadcn 관련 의존성
-- 스타일링: tailwindcss 의존성 확인
-
-### 2. 라우트 맵 생성
+### 1. Project Basic Information
 
 ```bash
-# app/ 디렉토리 구조 스캔
+# Check tech stack from package.json
 ```
 
-- Glob으로 `app/**/page.tsx` 패턴 검색
-- 각 라우트의 경로 추출
-- 라우트 그룹 식별: `(dashboard)`, `(marketing)`, `(auth)` 등
-- 각 페이지의 유형 판별 (파일 내용 기반)
+- Read `package.json`
+- Identify framework: next, react, vue, etc.
+- Check UI library: shadcn-related dependencies
+- Styling: check tailwindcss dependencies
 
-### 3. 컴포넌트 인벤토리
+### 2. Route Map Generation
 
-**shadcn 컴포넌트:**
-- Glob으로 `components/ui/*.tsx` 스캔
-- 파일명에서 컴포넌트명 추출 (button.tsx → Button)
+```bash
+# Scan app/ directory structure
+```
 
-**커스텀 컴포넌트:**
-- Glob으로 `components/**/*.tsx` 스캔 (ui/ 제외)
-- 주요 커스텀 컴포넌트 식별
+- Use Glob to search `app/**/page.tsx` pattern
+- Extract path for each route
+- Identify route groups: `(dashboard)`, `(marketing)`, `(auth)`, etc.
+- Determine page type for each page (based on file content)
 
-### 4. 레이아웃 분석
+### 3. Component Inventory
 
-- Read로 `app/layout.tsx` 및 하위 `layout.tsx` 파일 읽기
-- 사이드바 존재 여부 및 너비 확인
-- 헤더 존재 여부 및 높이 확인
-- 콘텐츠 영역의 max-width, padding 확인
-- 접을 수 있는 사이드바 (collapsible) 여부
+**shadcn Components:**
+- Use Glob to scan `components/ui/*.tsx`
+- Extract component names from filenames (button.tsx → Button)
 
-### 5. 스타일 분석
+**Custom Components:**
+- Use Glob to scan `components/**/*.tsx` (excluding ui/)
+- Identify major custom components
+
+### 4. Layout Analysis
+
+- Read `app/layout.tsx` and nested `layout.tsx` files
+- Check sidebar presence and width
+- Check header presence and height
+- Check content area max-width and padding
+- Check collapsible sidebar support
+
+### 5. Style Analysis
 
 **tailwind.config:**
-- Read로 `tailwind.config.ts` 또는 `tailwind.config.js` 읽기
-- 커스텀 컬러, 브레이크포인트, 폰트 추출
+- Read `tailwind.config.ts` or `tailwind.config.js`
+- Extract custom colors, breakpoints, fonts
 
-**CSS 변수:**
-- Read로 `app/globals.css` 읽기
-- `--primary`, `--secondary`, `--radius` 등 변수 추출
-- 다크 모드 변수 존재 여부 확인
+**CSS Variables:**
+- Read `app/globals.css`
+- Extract variables such as `--primary`, `--secondary`, `--radius`
+- Check dark mode variable presence
 
-### 6. 패턴 식별
+### 6. Pattern Identification
 
-여러 페이지에서 반복되는 UI 패턴을 식별한다:
+Identify recurring UI patterns across multiple pages:
 
-- **데이터 표시**: 테이블 + 툴바, 카드 그리드, 리스트
-- **폼**: 카드로 감싼 폼, 섹션 구분 폼, 스텝 폼
-- **네비게이션**: 사이드바 그룹, 탭 네비게이션, 브레드크럼
+- **Data Display**: table + toolbar, card grid, list
+- **Forms**: card-wrapped forms, sectioned forms, step forms
+- **Navigation**: sidebar groups, tab navigation, breadcrumbs
 
-Grep으로 `DataTable`, `Card`, `Form`, `Tabs` 등의 사용 패턴을 검색한다.
+Use Grep to search usage patterns for `DataTable`, `Card`, `Form`, `Tabs`, etc.
 
-## 결과 저장
+## Result Storage
 
-분석 결과를 다음 스키마로 `.ui-designer/analysis.json`에 저장한다:
+Save analysis results to `.ui-designer/analysis.json` using the following schema:
 
 ```json
 {
@@ -146,32 +146,32 @@ Grep으로 `DataTable`, `Card`, `Form`, `Tabs` 등의 사용 패턴을 검색한
 }
 ```
 
-`.ui-designer/` 디렉토리가 없으면 생성한다.
+Create the `.ui-designer/` directory if it does not exist.
 
-## 결과 요약 출력
+## Result Summary Output
 
-저장 완료 후 분석 요약을 출력한다:
+Output an analysis summary after saving:
 
 ```
-프로젝트 분석 완료
+Project analysis complete
 
-기술 스택: Next.js + shadcn/ui + Tailwind CSS
-라우트: N개 페이지
+Tech stack: Next.js + shadcn/ui + Tailwind CSS
+Routes: N pages
   - dashboard: /dashboard, /dashboard/analytics
   - settings: /settings, /settings/profile
   - ...
-shadcn 컴포넌트: N개 (Button, Card, Table, ...)
-커스텀 컴포넌트: N개 (ThemeSwitch, SearchInput, ...)
-레이아웃: 사이드바(w-64) + 헤더(h-16) + 콘텐츠(max-w-7xl)
-스타일: 다크모드 지원, rounded-lg, primary=blue
+shadcn components: N (Button, Card, Table, ...)
+Custom components: N (ThemeSwitch, SearchInput, ...)
+Layout: Sidebar(w-64) + Header(h-16) + Content(max-w-7xl)
+Style: Dark mode supported, rounded-lg, primary=blue
 
-.ui-designer/analysis.json에 저장되었습니다.
+Saved to .ui-designer/analysis.json.
 ```
 
-## 도구 사용
+## Tool Usage
 
-- **Glob**: 파일 패턴 검색 (라우트, 컴포넌트 스캔)
-- **Read**: 파일 내용 읽기 (config, layout, CSS)
-- **Grep**: 코드 패턴 검색 (컴포넌트 사용처, import)
-- **Write**: analysis.json 저장
-- **Bash**: 디렉토리 생성 (`mkdir -p .ui-designer`)
+- **Glob**: File pattern search (route, component scanning)
+- **Read**: Read file contents (config, layout, CSS)
+- **Grep**: Code pattern search (component usage, imports)
+- **Write**: Save analysis.json
+- **Bash**: Create directories (`mkdir -p .ui-designer`)

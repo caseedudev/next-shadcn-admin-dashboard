@@ -15,116 +15,116 @@ description: >
 
 # UI Component Scout
 
-shadcn.batchtool.com에서 shadcn/ui 확장 컴포넌트를 탐색하고 추천하는 스킬.
+Skill for searching and recommending shadcn/ui extension components from shadcn.batchtool.com.
 
-## 핵심 원칙
+## Core Principles
 
-1. **절대 자동 트리거 금지**: 항상 명시적 호출 또는 사용자 승인 후에만 실행
-2. **batchtool 전담**: 이 스킬은 shadcn.batchtool.com만 리서치한다
-3. **목적 명확화 우선**: 리서치 전 어떤 컴포넌트가 필요한지 명확히 파악
-4. **적합성 평가**: 발견한 컴포넌트가 현재 프로젝트에 실제로 필요한지 판단
+1. **Never auto-trigger**: Only execute after explicit invocation or user approval
+2. **batchtool dedicated**: This skill only researches shadcn.batchtool.com
+3. **Clarify purpose first**: Clearly identify what components are needed before researching
+4. **Suitability assessment**: Determine whether discovered components are actually needed for the current project
 
-## 진입 경로
+## Entry Paths
 
-### 경로 A: 명시적 커맨드
+### Path A: Explicit Command
 
-`/ui-designer:ui-research component` 실행 시:
-- 사용자에게 어떤 컴포넌트가 필요한지 질문
-- 요구사항 파악 후 즉시 리서치 실행
+When `/ui-designer:ui-research component` is executed:
+- Ask the user what components are needed
+- Execute research immediately after understanding requirements
 
-### 경로 B: ui-designer 연동
+### Path B: ui-designer Integration
 
-ui-designer의 ui-consultant가 `[BATCHTOOL_RESEARCH_SUGGESTED]: [이유]` 신호를 보내고
-사용자가 승인한 경우:
-- 승인과 함께 전달된 컨텍스트(어떤 컴포넌트가 필요한지)를 사용
-- 바로 리서치 실행 (추가 질문 없이)
+When ui-designer's ui-consultant sends the `[BATCHTOOL_RESEARCH_SUGGESTED]: [reason]` signal
+and the user approves:
+- Use the context provided with approval (what components are needed)
+- Execute research immediately (without additional questions)
 
-## 워크플로우
+## Workflow
 
-### 1단계: 요구사항 파악 (경로 A에서만)
+### Step 1: Requirements Identification (Path A only)
 
-경로 A(명시적 커맨드)에서 진입한 경우:
+When entering from Path A (explicit command):
 
 ```
-어떤 컴포넌트를 찾고 계신가요?
+What components are you looking for?
 
-예시:
+Examples:
 - "data table with column pinning and sorting"
 - "calendar with time picker"
 - "kanban board"
 - "rich text editor"
 - "date range picker"
 
-현재 프로젝트의 주요 기술 스택: [analysis.json에서 로드 또는 "Next.js + shadcn/ui + Tailwind CSS"]
+Current project's main tech stack: [loaded from analysis.json or "Next.js + shadcn/ui + Tailwind CSS"]
 ```
 
-### 2단계: 리서치 실행
+### Step 2: Research Execution
 
-`ui-researcher` 에이전트를 COMPONENT 모드로 호출한다:
+Invoke the `ui-researcher` agent in COMPONENT mode:
 
 ```
 MODE: COMPONENT
-REQUIREMENTS: [파악된 컴포넌트 요구사항]
-PROJECT_STACK: [analysis.json 또는 기본값]
-CONTEXT: [추가 컨텍스트]
+REQUIREMENTS: [identified component requirements]
+PROJECT_STACK: [analysis.json or default]
+CONTEXT: [additional context]
 ```
 
-### 3단계: 결과 평가 및 제시
+### Step 3: Result Evaluation and Presentation
 
-에이전트가 반환한 결과에서 다음을 평가한다:
+Evaluate the following from the agent's returned results:
 
-**적합성 기준**:
-- 현재 프로젝트의 기술 스택과 호환되는가?
-- shadcn/ui 스타일 가이드와 일관성이 있는가?
-- 적극적으로 유지보수되고 있는가?
-- 설치/도입이 현실적으로 가능한가?
+**Suitability criteria**:
+- Is it compatible with the current project's tech stack?
+- Is it consistent with the shadcn/ui style guide?
+- Is it actively maintained?
+- Is installation/adoption realistically feasible?
 
-평가 결과를 추가하여 사용자에게 제시:
-
-```
-## batchtool 컴포넌트 탐색 결과
-
-[ui-researcher 에이전트 결과]
-
-### 적합성 평가
-
-| 컴포넌트 | 기술 호환성 | shadcn 일관성 | 도입 용이성 | 종합 |
-|---------|-----------|-------------|-----------|------|
-| [이름]  | ✅/⚠️/❌  | ✅/⚠️/❌    | ✅/⚠️/❌  | 추천/보류/비추천 |
-
-### 결론
-[채택 여부 및 이유 2-3줄]
-```
-
-### 4단계: 도입 결정
+Add evaluation results and present to the user:
 
 ```
-도입할 컴포넌트를 선택해주세요:
-  a) [컴포넌트명] 도입 — [도입 방법 요약]
-  b) [컴포넌트명] 도입 — [도입 방법 요약]
-  c) 도입하지 않음 (현재 설계 유지)
-  d) 다른 키워드로 재탐색
+## batchtool Component Search Results
+
+[ui-researcher agent results]
+
+### Suitability Assessment
+
+| Component | Tech Compatibility | shadcn Consistency | Adoption Ease | Overall |
+|-----------|-------------------|-------------------|---------------|---------|
+| [name]    | ✅/⚠️/❌          | ✅/⚠️/❌          | ✅/⚠️/❌      | Recommended/Hold/Not recommended |
+
+### Conclusion
+[Adoption decision and reasons in 2-3 lines]
 ```
 
-선택 후:
-- **도입 결정 시**: 구체적 설치/통합 방법 안내, 기존 설계와의 통합 포인트 설명
-- **미도입 결정 시**: "현재 설계를 유지합니다" 메시지 후 기존 워크플로우 복귀
-
-## batchtool 리서치 불가 처리
-
-WebFetch 실패 시:
+### Step 4: Adoption Decision
 
 ```
-shadcn.batchtool.com 접근 불가.
-
-대신 공식 shadcn/ui에서 유사 기능 확인을 권장합니다:
-- 공식 컴포넌트: https://ui.shadcn.com/docs/components/[component-name]
-- 커뮤니티 확장: https://github.com/birobirobiro/awesome-shadcn-ui
-
-필요한 컴포넌트를 직접 알려주시면 대안을 찾아드리겠습니다.
+Please select components to adopt:
+  a) Adopt [component name] — [adoption method summary]
+  b) Adopt [component name] — [adoption method summary]
+  c) Do not adopt (keep current design)
+  d) Re-search with different keywords
 ```
 
-## 참조 문서
+After selection:
+- **When adopting**: Provide specific installation/integration instructions, explain integration points with existing design
+- **When not adopting**: Display "Keeping current design" message and return to existing workflow
 
-- `references/batchtool-guide.md` — batchtool 사이트 구조, 알려진 컴포넌트 카테고리
-- `.ui-designer/analysis.json` — 프로젝트 기술 스택
+## batchtool Research Failure Handling
+
+When WebFetch fails:
+
+```
+shadcn.batchtool.com is inaccessible.
+
+We recommend checking for similar features in official shadcn/ui instead:
+- Official components: https://ui.shadcn.com/docs/components/[component-name]
+- Community extensions: https://github.com/birobirobiro/awesome-shadcn-ui
+
+If you tell us the specific components you need, we can find alternatives.
+```
+
+## Reference Documents
+
+- `references/batchtool-guide.md` — batchtool site structure, known component categories
+- `.ui-designer/analysis.json` — Project tech stack

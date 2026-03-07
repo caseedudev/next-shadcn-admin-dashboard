@@ -41,3 +41,7 @@ next-env.d.ts
 
 # oh-my-claudecode
 .omc/
+
+# local codex artifacts
+.codex/
+.agents/

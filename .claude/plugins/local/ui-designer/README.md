@@ -1,7 +1,9 @@
 # UI Designer Plugin
 
-UI 페이지 설계 및 구현을 위한 Claude Code 플러그인.
+UI 페이지 설계 및 구현을 위한 Claude Code / Codex 플러그인.
 프로젝트를 분석하고, 컴포넌트를 추천하고, 레이아웃을 설계하고, 코드를 생성한다.
+
+> 아래 슬래시 명령 예시는 Codex 기준이다. Claude Code에서는 같은 명령을 `/ui-designer:...` 형태로 사용한다.
 
 ## 핵심 특징
 
@@ -41,9 +43,12 @@ bash .claude/plugins/local/ui-designer/install-antigravity.sh
 
 ```bash
 bash .claude/plugins/local/ui-designer/install-codex.sh
+CODEX_HOME="$PWD/.codex" codex
 ```
 
-`~/.codex/prompts/`에 커맨드 3개 설치.
+프로젝트 로컬 `.codex/prompts/`에 커맨드 3개, `.agents/skills/`에 스킬 3개를 설치한다.
+전역 `~/.codex`, `~/.agents`는 건드리지 않는다.
+글로벌 `~/.codex/auth.json`이 있으면 로컬 `.codex/auth.json`으로 자동 연결한다.
 
 ### 제거
 
@@ -51,6 +56,8 @@ bash .claude/plugins/local/ui-designer/install-codex.sh
 rm -rf .claude/commands/ui-designer
 rm -f .claude/skills/ui-designer-*
 rm -f .claude/agents/{ui-analyzer,ui-consultant,ui-researcher}.md
+rm -f .codex/prompts/ui-designer-*.md
+rm -rf .agents/skills/ui-designer-*
 ```
 
 ---
@@ -60,7 +67,7 @@ rm -f .claude/agents/{ui-analyzer,ui-consultant,ui-researcher}.md
 ### 1단계: 프로젝트 분석
 
 ```
-/ui-designer:ui-analyze
+/ui-designer-ui-analyze
 ```
 
 프로젝트의 라우트, 컴포넌트, 레이아웃, 스타일을 스캔하고 `.ui-designer/analysis.json`에 저장한다.
@@ -68,9 +75,9 @@ rm -f .claude/agents/{ui-analyzer,ui-consultant,ui-researcher}.md
 ### 2단계: UI 설계
 
 ```
-/ui-designer:ui-design landing
-/ui-designer:ui-design dashboard
-/ui-designer:ui-design "학원 SaaS Hero 섹션"
+/ui-designer-ui-design landing
+/ui-designer-ui-design dashboard
+/ui-designer-ui-design "학원 SaaS Hero 섹션"
 ```
 
 페이지 유형을 지정하거나 자유롭게 설명하면 인터랙티브 Q&A → 설계안 → 코드 생성 순서로 진행한다.
@@ -79,9 +86,9 @@ rm -f .claude/agents/{ui-analyzer,ui-consultant,ui-researcher}.md
 ### 2.5단계: 외부 리소스 리서치 (선택적)
 
 ```
-/ui-designer:ui-research template   — Vercel Templates, shadcnblocks 등 탐색
-/ui-designer:ui-research component  — batchtool 확장 컴포넌트 탐색 (승인 후 실행)
-/ui-designer:ui-research all        — 템플릿 + 컴포넌트 전체 탐색
+/ui-designer-ui-research template   — Vercel Templates, shadcnblocks 등 탐색
+/ui-designer-ui-research component  — batchtool 확장 컴포넌트 탐색 (승인 후 실행)
+/ui-designer-ui-research all        — 템플릿 + 컴포넌트 전체 탐색
 ```
 
 ### 3단계: 자동 감지
@@ -92,7 +99,7 @@ rm -f .claude/agents/{ui-analyzer,ui-consultant,ui-researcher}.md
 
 ## 슬래시 커맨드
 
-### `/ui-designer:ui-design [type|description]`
+### `/ui-designer-ui-design [type|description]`
 
 UI 페이지를 설계하고 구현하는 전체 워크플로우를 실행한다.
 
@@ -105,7 +112,7 @@ UI 페이지를 설계하고 구현하는 전체 워크플로우를 실행한다
 **사용 예시:**
 
 ```
-> /ui-designer:ui-design dashboard
+> /ui-designer-ui-design dashboard
 
 프로젝트 분석 데이터를 로드합니다...
 
@@ -119,7 +126,7 @@ UI 페이지를 설계하고 구현하는 전체 워크플로우를 실행한다
   d) 직접 입력
 ```
 
-### `/ui-designer:ui-research [template|component|all]`
+### `/ui-designer-ui-research [template|component|all]`
 
 외부 UI 리소스를 리서치하여 프로젝트에 맞는 템플릿, 블록, 컴포넌트를 추천한다.
 
@@ -130,7 +137,7 @@ UI 페이지를 설계하고 구현하는 전체 워크플로우를 실행한다
 | `all` | 템플릿 + 컴포넌트 순서로 실행 |
 | 없음 | 대화형으로 리서치 유형 선택 |
 
-### `/ui-designer:ui-analyze [--refresh]`
+### `/ui-designer-ui-analyze [--refresh]`
 
 현재 프로젝트의 UI 구조를 분석하고 `.ui-designer/analysis.json`에 저장한다.
 
@@ -161,7 +168,7 @@ shadcn 컴포넌트: 24개 설치됨
 스타일: 다크 모드 지원, rounded-lg, hsl 컬러 시스템
 
 분석 결과가 .ui-designer/analysis.json에 저장되었습니다.
-이제 /ui-designer:ui-design 으로 UI 설계를 시작할 수 있습니다.
+이제 /ui-designer-ui-design 으로 UI 설계를 시작할 수 있습니다.
 ```
 
 ---
@@ -233,7 +240,7 @@ UI 관련 작업 시 자동으로 트리거되는 컨텍스트 스킬.
 
 ### `ui-designer-ui-component-scout`
 
-**자동 트리거 없음.** 명시적 커맨드(`/ui-designer:ui-research component`) 또는 ui-designer 연동(사용자 승인 후)에만 실행.
+**자동 트리거 없음.** 명시적 커맨드(`/ui-designer-ui-research component`) 또는 ui-designer 연동(사용자 승인 후)에만 실행.
 
 **리서치 대상:** shadcn.batchtool.com (shadcn/ui 확장 컴포넌트)
 
@@ -256,9 +263,11 @@ UI 관련 작업 시 자동으로 트리거되는 컨텍스트 스킬.
 
 | 에이전트 | 역할 | 호출 시점 |
 |---------|------|----------|
-| `ui-analyzer` | 프로젝트 UI 구조 분석 | `/ui-designer:ui-analyze` 실행 시 |
-| `ui-consultant` | 설계안 생성 및 컨설팅 | `/ui-designer:ui-design` 설계 단계에서 |
+| `ui-analyzer` | 프로젝트 UI 구조 분석 | `/ui-designer-ui-analyze` 실행 시 |
+| `ui-consultant` | 설계안 생성 및 컨설팅 | `/ui-designer-ui-design` 설계 단계에서 |
 | `ui-researcher` | 외부 리소스 WebFetch 리서치 (TEMPLATE/COMPONENT 두 모드) | `ui-template-scout`, `ui-component-scout` 스킬이 내부적으로 호출 |
+
+Codex에서는 위 에이전트를 별도로 설치하지 않으며, 커맨드가 분석/설계/리서치를 직접 수행한다.
 
 ---
 
@@ -305,9 +314,9 @@ ui-designer/
 │   └── plugin.json              # 플러그인 메타데이터
 ├── install.sh                   # 로컬 설치 스크립트
 ├── commands/
-│   ├── ui-design.md             # /ui-designer:ui-design
-│   ├── ui-analyze.md            # /ui-designer:ui-analyze
-│   └── ui-research.md           # /ui-designer:ui-research
+│   ├── ui-design.md             # /ui-designer-ui-design
+│   ├── ui-analyze.md            # /ui-designer-ui-analyze
+│   └── ui-research.md           # /ui-designer-ui-research
 ├── skills/
 │   ├── ui-design-guide/         # ui-designer-ui-design-guide (자동 트리거)
 │   │   ├── SKILL.md

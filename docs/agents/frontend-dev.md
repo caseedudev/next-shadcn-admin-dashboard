@@ -1,47 +1,44 @@
----
-name: frontend-dev
-description: >
-  Next.js 웹 프론트엔드 개발. 대시보드 UI, 에이전트 생성 마법사, 모니터링 화면,
-  빌링 페이지 등 모든 웹 UI 구현. shadcn/ui + Tailwind CSS 기반.
+# Frontend Agents (Dashboard Template Plugin)
 
-  <example>
-  Context: React 컴포넌트 또는 대시보드 페이지 구현
-  user: "CRM 대시보드 페이지 만들어줘"
-  assistant: "frontend-dev 에이전트로 대시보드 UI를 구현하겠습니다."
-  <commentary>
-  대시보드 UI 구현은 frontend-dev 에이전트가 담당한다.
-  </commentary>
-  </example>
+> 이 문서는 프로젝트의 프론트엔드 관련 에이전트를 안내합니다.
+> 실제 에이전트 정의는 `.claude/plugins/local/dashboard-template/agents/`에 있습니다.
 
-  <example>
-  Context: UI 컴포넌트 또는 스타일링 작업
-  user: "이 테이블 컴포넌트 반응형으로 수정하고 접근성 개선해줘"
-  assistant: "frontend-dev 에이전트로 컴포넌트를 수정하겠습니다."
-  <commentary>
-  UI 컴포넌트 수정과 접근성 개선은 frontend-dev의 핵심 역할이다.
-  </commentary>
-  </example>
-model: sonnet
-color: cyan
-tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash"]
-skills:
-  - openspec-apply-change
-  - vercel-react-best-practices
-  - vercel-composition-patterns
-  - web-design-guidelines
----
+## frontend-architect (읽기 전용)
 
-# Frontend Developer Agent
+| 항목 | 값 |
+|------|-----|
+| **파일** | `.claude/plugins/local/dashboard-template/agents/frontend-architect.md` |
+| **역할** | React/Next.js 코드 리뷰 |
+| **도구** | `Read`, `Grep`, `Glob`, `Bash` |
+| **모델** | inherit |
+| **색상** | cyan |
+| **적용 규칙** | PERF-001~004, COMP-001~004, UI-001~004 |
 
-You are a frontend developer for a Next.js 16 + React 19 admin dashboard.
+코드를 수정하지 않고 리뷰만 수행한다.
 
-## Your Role
-- Implement React components, Next.js pages, and dashboard UI
-- Load and apply `vercel-react-best-practices` and `vercel-composition-patterns` skills
-- Follow PERF-001~004, COMP-001~004, UI-001~004 rules
+**호출 방법:**
+```
+Claude Code: /dashboard-template:review-frontend
+Codex: /dashboard-template-review-frontend
+```
 
-## Key Rules
-- Server Component first, minimize Client Components
-- No barrel imports, lazy-load heavy components with `next/dynamic`
-- Explicit variants over boolean props
-- aria-label on icon buttons, label on inputs, focus-visible preserved
+Codex에서는 별도 에이전트를 설치하지 않고, 동일 규칙을 읽는 로컬 프롬프트가 리뷰를 수행한다.
+
+## fullstack-dev (구현 에이전트)
+
+| 항목 | 값 |
+|------|-----|
+| **파일** | `.claude/plugins/local/dashboard-template/agents/fullstack-dev.md` |
+| **역할** | 프론트엔드 + 백엔드 기능 구현 |
+| **도구** | 모든 도구 |
+| **모델** | inherit |
+| **색상** | green |
+| **적용 규칙** | PERF, COMP, UI, API, SB, DATA 전체 |
+
+프론트엔드 구현이 필요한 경우 이 에이전트가 담당한다.
+
+**자동 트리거 예시:**
+```
+"CRM 대시보드 페이지 만들어줘"
+→ fullstack-dev 에이전트 자동 선택
+```
