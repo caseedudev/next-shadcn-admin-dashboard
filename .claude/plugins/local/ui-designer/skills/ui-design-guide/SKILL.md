@@ -4,7 +4,8 @@ description: >
   This skill should be used when the user asks to "create a page", "make a UI",
   "design a layout", "add a section", "build a landing page", "create a dashboard",
   "make a settings page", "add a hero section", or mentions UI-related terms like
-  "페이지 만들어줘", "UI 수정", "레이아웃 변경", "섹션 추가", "화면 구성".
+  "페이지 만들어줘", "UI 수정", "레이아웃 변경", "섹션 추가", "화면 구성",
+  "대시보드 만들어줘", "로그인 페이지 만들어줘", "폼 추가해줘".
   Provides project-aware UI component recommendations, layout design, and code generation
   through an interactive Q&A workflow.
 version: 0.1.0

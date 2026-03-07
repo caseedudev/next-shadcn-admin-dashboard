@@ -1,4 +1,7 @@
 ---
+name: ui-analyzer
+model: inherit
+color: green
 description: >
   프로젝트 UI 구조 분석 전문 서브에이전트. 코드베이스를 스캔하여 라우트, 컴포넌트,
   레이아웃, 스타일, 디자인 토큰을 체계적으로 분석하고 .ui-designer/analysis.json을 생성한다.
