@@ -23,9 +23,13 @@ if [ -d "$SCRIPT_DIR/skills" ]; then
     dest="$TARGET_DIR/${PLUGIN_NAME}-${name}"
     rm -rf "$dest"
     cp -R "$d" "$dest"
+    echo "    + $(basename "$dest")"
   done
   count=$(ls -d "$SCRIPT_DIR/skills"/*/ 2>/dev/null | wc -l | tr -d ' ')
   echo "  skills: ${count}개 설치 → $TARGET_DIR"
+else
+  echo "  [경고] skills 디렉토리가 없습니다: $SCRIPT_DIR/skills"
+  exit 1
 fi
 
 echo "[$PLUGIN_NAME] Antigravity 설치 완료."

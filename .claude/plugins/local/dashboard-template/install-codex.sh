@@ -21,10 +21,18 @@ if [ -d "$SCRIPT_DIR/commands" ]; then
     [ -f "$f" ] || continue
     name=$(basename "$f" .md)
     dest="$TARGET_DIR/${PLUGIN_NAME}-${name}.md"
+    if [ -f "$dest" ]; then
+      echo "  [갱신] $(basename "$dest")"
+    else
+      echo "  [신규] $(basename "$dest")"
+    fi
     cp "$f" "$dest"
     count=$((count + 1))
   done
   echo "  commands: ${count}개 설치 → $TARGET_DIR"
+else
+  echo "  [경고] commands 디렉토리가 없습니다: $SCRIPT_DIR/commands"
+  exit 1
 fi
 
 echo "[$PLUGIN_NAME] Codex 설치 완료."
