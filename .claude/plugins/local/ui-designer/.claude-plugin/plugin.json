@@ -1,0 +1,9 @@
+{
+  "name": "ui-designer",
+  "version": "0.1.0",
+  "description": "UI 페이지 설계 및 구현 가이드. 프로젝트 분석, 컴포넌트 추천, 레이아웃 설계, 코드 생성을 지원한다.",
+  "author": {
+    "name": "freelife"
+  },
+  "keywords": ["ui", "design", "layout", "components", "shadcn"]
+}
