@@ -114,5 +114,5 @@ template 완료 후:
 
 다음 단계:
 - UI 설계를 계속하려면: /ui-designer:ui-design [page-type]
-- 추가 리서치: /ui-resource-scout:ui-research [template|component]
+- 추가 리서치: /ui-designer:ui-research [template|component]
 ```
