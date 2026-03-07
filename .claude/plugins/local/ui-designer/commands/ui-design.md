@@ -28,6 +28,33 @@ UI 페이지를 설계하고 구현하는 전체 워크플로우를 실행한다
 - **없으면**: ui-analyzer 서브에이전트를 호출하여 자동으로 분석을 실행한다.
   분석 완료 후 결과를 사용자에게 간단히 요약한다.
 
+### 1.5. 특수 페이지 감지 및 외부 리소스 제안
+
+페이지 유형 및 인자 설명을 분석하여 특수 페이지 여부를 판별한다.
+
+**특수 페이지 신호** (하나 이상 해당 시):
+- 복합 마케팅/랜딩: Hero + Features + Testimonials + CTA 등 이질적 섹션 5개+
+- 특수 인터랙션: 애니메이션, 스크롤 이펙트, 패럴랙스 명시적 요청
+- 임팩트 키워드: "화려하게", "인상적으로", "마케팅용", "프로모션", "세일즈"
+- 표준 초과: `references/page-templates.md` 표준 구성으로 설계가 명백히 부족한 경우
+
+**특수 페이지로 판별된 경우**:
+
+```
+이 페이지는 표준 컴포넌트 조합만으로 설계하기 어려운 특수 페이지로 판단됩니다.
+감지 이유: [판별 근거 1줄]
+
+ui-resource-scout 플러그인으로 외부 리소스를 리서치하면 더 완성도 높은 설계를 제안드릴 수 있습니다.
+(Vercel Templates, shadcnblocks.com, ui.shadcn.com/blocks 등)
+
+외부 리소스를 리서치할까요? (y/n)
+```
+
+- **y**: `ui-template-scout` 스킬을 호출하여 리서치 실행 → 결과 반영 후 2단계로
+- **n**: 2단계(Q&A)로 바로 진행
+
+**일반 페이지인 경우**: 이 단계를 건너뛰고 2단계로 진행한다.
+
 ### 2. 인터랙티브 Q&A
 
 ui-design-guide 스킬의 `references/qa-templates.md`에서 해당 유형의 질문 목록을 로드한다.
@@ -81,3 +108,4 @@ Q&A 완료 후 ui-consultant 서브에이전트를 호출하여 설계안을 생
 - `references/page-templates.md` — 페이지 표준 구성
 - `references/qa-templates.md` — Q&A 질문 템플릿
 - `references/design-principles.md` — 디자인 원칙 + 검증
+- `references/external-resources.md` — 아이콘 정책(Lucide 기본), 외부 리소스 목록, 특수 페이지 판별 기준

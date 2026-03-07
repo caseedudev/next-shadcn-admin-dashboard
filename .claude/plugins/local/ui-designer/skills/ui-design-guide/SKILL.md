@@ -1,13 +1,6 @@
 ---
 name: ui-design-guide
-description: >
-  This skill should be used when the user asks to "create a page", "make a UI",
-  "design a layout", "add a section", "build a landing page", "create a dashboard",
-  "make a settings page", "add a hero section", or mentions UI-related terms like
-  "페이지 만들어줘", "UI 수정", "레이아웃 변경", "섹션 추가", "화면 구성",
-  "대시보드 만들어줘", "로그인 페이지 만들어줘", "폼 추가해줘".
-  Provides project-aware UI component recommendations, layout design, and code generation
-  through an interactive Q&A workflow.
+description: "UI 페이지 설계 및 구현 가이드. 프로젝트 분석 기반 컴포넌트 추천, 레이아웃 설계, 코드 생성을 제공한다."
 ---
 
 # UI Design Guide
@@ -57,6 +50,14 @@ description: >
 | form, 폼, 입력, 등록 | Form |
 
 유형이 불명확하면 사용자에게 확인한다.
+
+### 1.15 특수 페이지 감지
+
+페이지 유형 판별 후, 요청이 특수 페이지 신호를 포함하는지 확인한다:
+- 복합 섹션(5개+), 특수 인터랙션, 임팩트 키워드 감지 시
+- `ui-template-scout` 스킬 활성화 여부를 사용자에게 제안한다
+- `/ui-design` 커맨드와 동일한 특수 페이지 판별 기준 적용
+- `references/external-resources.md`의 특수 페이지 판별 기준 참조
 
 ### 1.2 Q&A 진행
 
@@ -176,6 +177,7 @@ description: >
 - **`references/page-templates.md`** — 8종 페이지 유형별 표준 구성. 섹션 순서, ASCII 스켈레톤, shadcn 매핑, Next.js 파일 구조.
 - **`references/qa-templates.md`** — 페이지 유형별 인터랙티브 질문 템플릿. Q&A 진행 시 반드시 이 형식을 따른다.
 - **`references/design-principles.md`** — 시각적 계층, 일관성, 반응형, 컬러, 타이포그래피, 인터랙션 원칙 + Vercel Guidelines 검증.
+- **`references/external-resources.md`** — 아이콘 정책(Lucide 기본), 외부 리소스 목록, batchtool 가이드. 특수 페이지 감지 및 아이콘 선택 시 참조.
 
 ### 프로젝트 분석 데이터
 
@@ -188,3 +190,4 @@ description: >
 3. **승인 후 실행**: 설계안을 반드시 사용자에게 보여주고 승인받은 후 코드 생성
 4. **일관성 유지**: 기존 프로젝트의 스타일/패턴/컨벤션과 일관되게
 5. **검증 후 제출**: 생성된 코드를 디자인 원칙과 Web Interface Guidelines로 검증
+6. **아이콘은 Lucide 우선**: 특별한 요청 없으면 `lucide-react`를 기본 아이콘으로 사용. `references/external-resources.md` 아이콘 정책 참조.
