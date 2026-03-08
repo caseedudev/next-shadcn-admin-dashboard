@@ -74,13 +74,11 @@ UI 관련 문서를 만들거나 화면 구조가 포함되는 경우, `ui-desig
 분석 결과는 `.ui-designer/analysis.json`을 기준으로 문서에 반영한다.
 
 ## 3. Visual Research
-요구사항이 복잡한 랜딩, 마케팅, 특수 인터랙션, 5개 이상 이질 섹션을 포함한다면 `ui-designer` 플러그인의 리서치를 선행한다.
+요구사항이 복잡한 랜딩, 마케팅, 특수 인터랙션, 5개 이상 이질 섹션을 포함한다면 `ui-designer`의 `/ui-designer-ui-design` 워크플로우 안에서 외부 리소스 제안 단계를 활용한다.
 
-- 템플릿 레벨 탐색: `/ui-designer-ui-research template`
-- 전체 탐색: `/ui-designer-ui-research all`
-- batchtool 기반 확장 컴포넌트 탐색: `/ui-designer-ui-research component`
-
-`component` 리서치는 사용자 승인 후에만 수행한다.
+- 기본 진입: `/ui-designer-ui-design <type|description>`
+- 특수 페이지로 판단되면 Step 2.5에서 외부 리소스 탐색 여부를 먼저 묻는다
+- Codex 자동화에서는 별도 리서치 커맨드 대신 관련 레퍼런스 문서와 프롬프트 계약을 직접 검증한다
 
 ## 4. Requirement Convergence
 요구조건과 UI 베이스라인이 완전히 합의될 때까지 질의와 보완을 반복한다. 합의 전에는 구현 계획을 확정하지 않는다.
@@ -118,10 +116,16 @@ UI 관련 문서를 만들거나 화면 구조가 포함되는 경우, `ui-desig
   - 현행 UI 구조 분석
 - `/ui-designer-ui-design <type|description>`
   - 페이지 설계 및 UI proposal 작성
-- `/ui-designer-ui-research template|component|all`
-  - 외부 레퍼런스와 확장 컴포넌트 탐색
+- `/ui-designer-ui-validate [--full|--data|--hooks|--search|--persist]`
+  - 플러그인 구조/데이터/훅/영속성 검증
+- `/ui-designer-ui-qa [--all|--search|--workflow|--antipattern|--persist|--edge-cases]`
+  - 검색/안티패턴/영속성/엣지 케이스 종합 QA
+- `bash .claude/plugins/local/ui-designer/scripts/validate-plugin.sh --full`
+  - Codex 자동화/비대화형 검증 경로
+- `bash .claude/plugins/local/ui-designer/scripts/qa-plugin.sh --all`
+  - Codex 가능한 범위 기준 종합 QA
 
-문서에는 가능한 한 어떤 단계에서 어떤 플러그인 명령을 실행할지 명시한다. 단순히 “디자인한다”, “구현한다”라고 적지 말고, 실제 워크플로우와 산출물을 연결하라.
+문서에는 가능한 한 어떤 단계에서 어떤 플러그인 명령 또는 검증 스크립트를 실행할지 명시한다. 단순히 “디자인한다”, “구현한다”라고 적지 말고, 실제 워크플로우와 산출물을 연결하라.
 
 # Document Generation Order
 문서는 반드시 아래 순서로 작성한다.

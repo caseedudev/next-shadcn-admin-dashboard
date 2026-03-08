@@ -12,6 +12,9 @@ PROMPTS_DIR="$PROJECT_ROOT/.codex/prompts"
 SKILLS_DIR="$PROJECT_ROOT/.agents/skills"
 LOCAL_AUTH_FILE="$PROJECT_ROOT/.codex/auth.json"
 GLOBAL_AUTH_FILE="$HOME/.codex/auth.json"
+CODEX_SKILL_NAME="${PLUGIN_NAME}-ui-design-guide"
+CODEX_SKILL_DIR=".agents/skills/${CODEX_SKILL_NAME}"
+CODEX_SEARCH_SCRIPT="${CODEX_SKILL_DIR}/scripts/search.py"
 
 rewrite_prompt() {
   local src="$1"
@@ -55,6 +58,44 @@ rewrite_prompt() {
   ' "$src" > "$dest"
 }
 
+rewrite_codex_file() {
+  local target="$1"
+
+  python3 - "$target" "$CODEX_SKILL_DIR" "$CODEX_SEARCH_SCRIPT" <<'PY'
+from pathlib import Path
+import sys
+
+path = Path(sys.argv[1])
+skill_dir = sys.argv[2]
+search_script = sys.argv[3]
+
+text = path.read_text(encoding="utf-8")
+replacements = [
+    (
+        ".claude/plugins/local/ui-designer/skills/ui-design-guide/references/",
+        f"{skill_dir}/references/",
+    ),
+    ("`scripts/search.py`", f"`{search_script}`"),
+    ("python3 scripts/search.py", f"python3 {search_script}"),
+]
+
+for before, after in replacements:
+    text = text.replace(before, after)
+
+path.write_text(text, encoding="utf-8")
+PY
+}
+
+sanitize_copied_skill() {
+  local target_dir="$1"
+
+  find "$target_dir" -type l -delete
+
+  while IFS= read -r -d '' file; do
+    rewrite_codex_file "$file"
+  done < <(find "$target_dir" -type f -name '*.md' -print0)
+}
+
 echo "[$PLUGIN_NAME] Codex 로컬 설치 시작..."
 
 mkdir -p "$PROMPTS_DIR"
@@ -81,6 +122,7 @@ if [ -d "$SCRIPT_DIR/commands" ]; then
       echo "  [신규] $(basename "$dest")"
     fi
     rewrite_prompt "$f" "$dest" "$command_name"
+    rewrite_codex_file "$dest"
     count=$((count + 1))
   done
   echo "  prompts: ${count}개 설치 → $PROMPTS_DIR"
@@ -97,6 +139,22 @@ if [ -d "$SCRIPT_DIR/skills" ]; then
     dest="$SKILLS_DIR/${PLUGIN_NAME}-${name}"
     rm -rf "$dest"
     cp -R "$d" "$dest"
+
+    # data/ 및 scripts/ 복사 (검색 엔진 + Codex 검증 스크립트 지원)
+    if [ -d "$SCRIPT_DIR/data" ]; then
+      mkdir -p "$dest/data"
+      cp "$SCRIPT_DIR/data"/*.csv "$dest/data/" 2>/dev/null || true
+      echo "    + data: $(ls "$dest/data"/*.csv 2>/dev/null | wc -l | tr -d ' ')개 CSV"
+    fi
+    if compgen -G "$SCRIPT_DIR/scripts/*" >/dev/null; then
+      mkdir -p "$dest/scripts"
+      cp "$SCRIPT_DIR/scripts/"* "$dest/scripts/" 2>/dev/null || true
+      chmod +x "$dest/scripts/"*.sh 2>/dev/null || true
+      echo "    + scripts: $(ls "$dest/scripts" 2>/dev/null | tr '\n' ' ' | sed 's/[[:space:]]*$//')"
+    fi
+
+    sanitize_copied_skill "$dest"
+
     count=$((count + 1))
   done
   echo "  skills: ${count}개 설치 → $SKILLS_DIR"
@@ -104,4 +162,4 @@ fi
 
 echo "[$PLUGIN_NAME] Codex 로컬 설치 완료."
 echo "  사용 전: CODEX_HOME=\"$PROJECT_ROOT/.codex\" codex"
-echo "  커맨드 예시: /ui-designer-ui-design, /ui-designer-ui-research, /ui-designer-ui-analyze"
+echo "  커맨드 예시: /ui-designer-ui-analyze, /ui-designer-ui-design, /ui-designer-ui-validate, /ui-designer-ui-qa"

@@ -23,6 +23,12 @@ if [ -d "$SCRIPT_DIR/skills" ]; then
     dest="$TARGET_DIR/${PLUGIN_NAME}-${name}"
     rm -rf "$dest"
     cp -R "$d" "$dest"
+    if compgen -G "$SCRIPT_DIR/scripts/*" >/dev/null; then
+      mkdir -p "$dest/scripts"
+      cp "$SCRIPT_DIR/scripts/"* "$dest/scripts/" 2>/dev/null || true
+      chmod +x "$dest/scripts/"*.sh 2>/dev/null || true
+      echo "      + scripts: $(ls "$dest/scripts" 2>/dev/null | tr '\n' ' ' | sed 's/[[:space:]]*$//')"
+    fi
     echo "    + $(basename "$dest")"
   done
   count=$(ls -d "$SCRIPT_DIR/skills"/*/ 2>/dev/null | wc -l | tr -d ' ')

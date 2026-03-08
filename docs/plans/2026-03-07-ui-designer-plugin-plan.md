@@ -1,5 +1,10 @@
 # ui-designer 플러그인 구현 계획
 
+## 구현 결과 메모 (2026-03-08)
+
+- 프로젝트 분석, 디자인 워크플로우 외에 플러그인 자체 검증용 `ui-validate`, `ui-qa`가 추가되었다.
+- Codex에서는 인터랙티브 Q&A 완전 재현이 불안정하므로, 자동화 검증은 셸 스크립트와 프롬프트 계약 검증을 조합하는 방향으로 정리되었다.
+
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
 **Goal:** UI 페이지 설계 및 구현을 가이드하는 Claude Code 플러그인을 만든다. 프로젝트 분석 → 인터랙티브 Q&A → 설계 제안 → 코드 생성 워크플로우를 제공한다.

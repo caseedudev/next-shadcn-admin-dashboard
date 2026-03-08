@@ -5,9 +5,10 @@ color: green
 description: >
   프로젝트 UI 구조 분석 전문 서브에이전트. 코드베이스를 스캔하여 라우트, 컴포넌트,
   레이아웃, 스타일, 디자인 토큰을 체계적으로 분석하고 .ui-designer/analysis.json을 생성한다.
-  /ui-analyze 커맨드 또는 ui-design-guide 스킬이 호출한다.
+  Codex의 /ui-designer-ui-analyze, Claude Code의 /ui-designer:ui-analyze 커맨드
+  또는 ui-design-guide 스킬이 호출한다.
   Use this agent when the user asks to "analyze project UI", "scan UI structure",
-  or when /ui-analyze command is executed.
+  or when the installed UI analyze command is executed.
 
   <example>
   Context: 사용자가 프로젝트 UI 분석을 요청

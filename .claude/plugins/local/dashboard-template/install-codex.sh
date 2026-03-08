@@ -97,6 +97,12 @@ if [ -d "$SCRIPT_DIR/skills" ]; then
     dest="$SKILLS_DIR/${PLUGIN_NAME}-${name}"
     rm -rf "$dest"
     cp -R "$d" "$dest"
+    if compgen -G "$SCRIPT_DIR/scripts/*" >/dev/null; then
+      mkdir -p "$dest/scripts"
+      cp "$SCRIPT_DIR/scripts/"* "$dest/scripts/" 2>/dev/null || true
+      chmod +x "$dest/scripts/"*.sh 2>/dev/null || true
+      echo "    + scripts: $(ls "$dest/scripts" 2>/dev/null | tr '\n' ' ' | sed 's/[[:space:]]*$//')"
+    fi
     count=$((count + 1))
   done
   echo "  skills: ${count}개 설치 → $SKILLS_DIR"

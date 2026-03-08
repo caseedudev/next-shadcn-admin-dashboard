@@ -226,31 +226,26 @@ codex
 
 ---
 
-## 🔌 플러그인
+## 🔌 로컬 플러그인
 
-이 프로젝트에는 **dashboard-template**, **ui-designer** 플러그인이 포함되어 있습니다. Claude Code와 Codex에서 모두 사용할 수 있으며, Codex는 프로젝트 로컬 `.codex`와 `.agents`만 사용합니다.
+이 프로젝트에는 **dashboard-template**, **ui-designer** 로컬 플러그인이 함께 포함되어 있습니다.
 
-> **위치:** `.claude/plugins/local/dashboard-template/`
+- `dashboard-template` 위치: `.claude/plugins/local/dashboard-template/`
+- `ui-designer` 위치: `.claude/plugins/local/ui-designer/`
 
-### 빠른 설치
+Claude Code는 `.claude/` 심볼릭 링크 기반으로 사용하고, Codex는 프로젝트 로컬 `.codex/prompts/`와 `.agents/skills/`만 사용합니다.
+
+### Dashboard Template
+
+설치:
 
 ```bash
 bash .claude/plugins/local/dashboard-template/install.sh
-```
-
-설치 스크립트가 `.claude/` 디렉토리에 심볼릭 링크를 생성합니다. 설치 후 Claude Code를 재시작하면 적용됩니다.
-
-### Codex 로컬 설치
-
-```bash
 bash .claude/plugins/local/dashboard-template/install-codex.sh
 CODEX_HOME="$PWD/.codex" codex
 ```
 
-로컬 프롬프트는 `.codex/prompts/`, 로컬 스킬은 `.agents/skills/`에만 설치됩니다.
-글로벌 `~/.codex/auth.json`이 있으면 로컬 `.codex/auth.json`으로 자동 연결됩니다.
-
-### 슬래시 명령
+주요 명령:
 
 | Claude Code | Codex | 설명 |
 |------|------|------|
@@ -262,73 +257,51 @@ CODEX_HOME="$PWD/.codex" codex
 | `/dashboard-template:new-migration <설명>` | `/dashboard-template-new-migration <설명>` | Supabase 마이그레이션 파일 스캐폴딩 |
 | `/dashboard-template:init-project` | `/dashboard-template-init-project` | 프로젝트 초기화 — 도메인 용어집 + 프로젝트 개관 문서 생성 |
 
-### 에이전트
+자동 적용:
 
-| 에이전트 | 역할 | 권한 |
-|---------|------|------|
-| `frontend-architect` | 프론트엔드 코드 리뷰 | 읽기 전용 |
-| `backend-architect` | 백엔드 코드 리뷰 | 읽기 전용 |
-| `fullstack-dev` | 기능 구현 (기본 에이전트) | 모든 도구 |
+- `dashboard-template-frontend-dev`, `dashboard-template-backend-dev`, `dashboard-template-fullstack-review`, `dashboard-template-project-init` 스킬
+- API 경로, 역방향 import, `(select auth.uid())` 패턴을 감시하는 훅
 
-Codex에서는 위 에이전트를 별도로 설치하지 않으며, 로컬 프롬프트가 동일 규칙 문서와 레퍼런스를 직접 읽어 워크플로우를 수행합니다.
+Codex 자동화/비대화형 검증:
 
-### 스킬 (자동 활성화)
+```bash
+bash .claude/plugins/local/dashboard-template/scripts/validate-plugin.sh --full
+bash .claude/plugins/local/dashboard-template/scripts/qa-plugin.sh --all
+```
 
-| 스킬 | 트리거 조건 |
-|------|------------|
-| `dashboard-template-frontend-dev` | React 컴포넌트, Next.js 페이지, UI 코드 작업 시 |
-| `dashboard-template-backend-dev` | API 라우트, Supabase, SQL, 마이그레이션 작업 시 |
-| `dashboard-template-fullstack-review` | PR 리뷰, 코드 리뷰 시 |
-| `dashboard-template-project-init` | 프로젝트 초기화 시 또는 도메인 문서 부재 감지 시 |
+상세: [dashboard-template README](.claude/plugins/local/dashboard-template/README.md)
 
-### 자동 가드레일 (훅)
+### UI Designer
 
-- `/api/v1/` 외부에 API 라우트 생성 시 **자동 차단**
-- `features/`·`lib/`에서 `@/app/` import 시 **자동 차단** (역방향 의존 방지)
-- SQL에서 `auth.uid()` 직접 사용 시 `(select auth.uid())` 패턴 사용 **경고**
-
-> **상세 사용법 및 예시:** [플러그인 README](.claude/plugins/local/dashboard-template/README.md)
-
-### UI Designer 플러그인
-
-UI 페이지 설계 및 구현을 위한 플러그인. 프로젝트를 분석하고, 컴포넌트를 추천하고, 레이아웃을 설계하고, 코드를 생성한다.
-
-> **위치:** `.claude/plugins/local/ui-designer/`
-
-#### 빠른 설치
+설치:
 
 ```bash
 bash .claude/plugins/local/ui-designer/install.sh
-```
-
-#### Codex 로컬 설치
-
-```bash
 bash .claude/plugins/local/ui-designer/install-codex.sh
 CODEX_HOME="$PWD/.codex" codex
 ```
 
-글로벌 `~/.codex/auth.json`이 있으면 로컬 `.codex/auth.json`으로 자동 연결됩니다.
-
-#### 슬래시 명령
+주요 명령:
 
 | Claude Code | Codex | 설명 |
 |------|------|------|
-| `/ui-designer:ui-analyze` | `/ui-designer-ui-analyze` | 프로젝트 UI 구조 분석 (라우트, 컴포넌트, 레이아웃, 스타일) |
-| `/ui-designer:ui-design [유형\|설명]` | `/ui-designer-ui-design [유형\|설명]` | UI 페이지 설계 및 구현 (Q&A → 설계안 → 코드 생성) |
-| `/ui-designer:ui-research [template\|component]` | `/ui-designer-ui-research [template\|component]` | 외부 UI 리소스 리서치 (Vercel Templates, batchtool 등) |
+| `/ui-designer:ui-analyze` | `/ui-designer-ui-analyze` | 프로젝트 UI 구조 분석 |
+| `/ui-designer:ui-design [유형\|설명]` | `/ui-designer-ui-design [유형\|설명]` | UI 페이지 설계 및 구현 |
+| `/ui-designer:ui-validate [옵션]` | `/ui-designer-ui-validate [옵션]` | 플러그인 구조/데이터/훅/영속성 검증 |
+| `/ui-designer:ui-qa [옵션]` | `/ui-designer-ui-qa [옵션]` | 검색/안티패턴/영속성/엣지케이스 종합 QA |
 
-#### 에이전트
+Codex 자동화/비대화형 검증:
 
-| 에이전트 | 역할 |
-|---------|------|
-| `ui-analyzer` | 프로젝트 UI 구조 분석 |
-| `ui-consultant` | UI 설계안 생성 및 컨설팅 |
-| `ui-researcher` | 외부 리소스 WebFetch 리서치 |
+```bash
+bash .claude/plugins/local/ui-designer/scripts/validate-plugin.sh --full
+bash .claude/plugins/local/ui-designer/scripts/qa-plugin.sh --all
+```
 
-Codex에서는 별도 에이전트 설치 없이, 로컬 프롬프트가 프로젝트 분석과 설계/리서치를 직접 수행합니다.
+이 스크립트는 Codex에서 실제로 실행 가능한 검증은 셸로 돌리고, 인터랙티브 Q&A가 필요한 항목은 프롬프트 계약 검증으로 대체합니다.
 
-> **상세 사용법 및 예시:** [플러그인 README](.claude/plugins/local/ui-designer/README.md)
+Codex에서는 별도 에이전트 설치 없이 로컬 프롬프트와 `.agents/skills/ui-designer-ui-design-guide/` 데이터를 직접 읽어 동작합니다.
+
+상세: [ui-designer README](.claude/plugins/local/ui-designer/README.md)
 
 ---
 

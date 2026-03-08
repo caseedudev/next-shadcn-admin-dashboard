@@ -1,7 +1,7 @@
 # Dashboard Template Plugin
 
 Next.js 16 + React 19 + Supabase 어드민 대시보드 템플릿 전용 Claude Code / Codex 플러그인.
-5개의 아키텍처 규칙 문서와 4개의 외부 스킬을 통합하여, 모든 개발 작업에서 규칙을 자동으로 적용한다.
+5개의 아키텍처 규칙 문서와 4개의 로컬 스킬을 통합하여, 모든 개발 작업에서 규칙을 자동으로 적용한다.
 
 > 아래 슬래시 명령 예시는 Codex 기준이다. Claude Code에서는 같은 명령을 `/dashboard-template:...` 형태로 사용한다.
 
@@ -41,19 +41,30 @@ CODEX_HOME="$PWD/.codex" codex
 전역 `~/.codex`, `~/.agents`는 건드리지 않는다.
 글로벌 `~/.codex/auth.json`이 있으면 로컬 `.codex/auth.json`으로 자동 연결한다.
 
+Codex에서는 로컬 프롬프트와 스킬로 워크플로우를 수행하고, 자동화 검증용 `scripts/validate-plugin.sh`, `scripts/qa-plugin.sh`도 함께 배포된다.
+
 ### 설치 확인
 
 플러그인이 정상 로드되면 아래 명령이 인식된다:
 
+| Claude Code | Codex | 설명 |
+|-------------|-------|------|
+| `/dashboard-template:checklist` | `/dashboard-template-checklist` | AI 체크리스트 실행 |
+| `/dashboard-template:review-frontend` | `/dashboard-template-review-frontend` | 프론트엔드 리뷰 |
+| `/dashboard-template:review-backend` | `/dashboard-template-review-backend` | 백엔드 리뷰 |
+| `/dashboard-template:new-api` | `/dashboard-template-new-api` | API 라우트 스캐폴딩 |
+| `/dashboard-template:new-feature` | `/dashboard-template-new-feature` | 피처 디렉토리 스캐폴딩 |
+| `/dashboard-template:new-migration` | `/dashboard-template-new-migration` | Supabase 마이그레이션 스캐폴딩 |
+| `/dashboard-template:init-project` | `/dashboard-template-init-project` | 프로젝트 초기화 |
+
+Codex 자동화 검증:
+
+```bash
+bash .claude/plugins/local/dashboard-template/scripts/validate-plugin.sh --full
+bash .claude/plugins/local/dashboard-template/scripts/qa-plugin.sh --all
 ```
-/dashboard-template-checklist          # AI 체크리스트 실행
-/dashboard-template-review-frontend    # 프론트엔드 리뷰
-/dashboard-template-review-backend     # 백엔드 리뷰
-/dashboard-template-new-api            # API 라우트 스캐폴딩
-/dashboard-template-new-feature        # 피처 디렉토리 스캐폴딩
-/dashboard-template-new-migration      # Supabase 마이그레이션 스캐폴딩
-/dashboard-template-init-project       # 프로젝트 초기화 (도메인 문서 생성)
-```
+
+`validate-plugin.sh`는 구조/훅/설치물 검증, `qa-plugin.sh`는 프롬프트 계약과 훅 동작 검증을 담당한다.
 
 Claude Code 에이전트 확인:
 ```

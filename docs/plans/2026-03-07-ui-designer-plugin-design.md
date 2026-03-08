@@ -1,5 +1,11 @@
 # ui-designer 플러그인 설계 문서
 
+## 최종 상태 (2026-03-08)
+
+- 현재 `ui-designer`는 `ui-analyze`, `ui-design`, `ui-validate`, `ui-qa` 4개 커맨드를 제공한다.
+- 초기 설계 당시의 리서치 스킬/커맨드 구상은 제거되었고, 외부 리소스 제안은 `ui-design` 워크플로우 내부 Step 2.5로 흡수되었다.
+- Codex 자동화 검증은 `scripts/validate-plugin.sh`, `scripts/qa-plugin.sh` 경로를 기준으로 재현 가능하도록 보강되었다.
+
 ## 개요
 
 UI 페이지 설계 및 구현을 위한 Claude Code 플러그인.

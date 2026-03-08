@@ -169,3 +169,5 @@
   - `docs/domain/glossary.md` 또는 `docs/domain/project.md` 부재 시 인터뷰 기반 생성 워크플로우 실행
   - `fullstack-dev` 에이전트가 도메인 문서를 참조하여 코드 네이밍 일관성 유지
 - Codex에서는 `/dashboard-template-init-project`, Claude Code에서는 `/dashboard-template:init-project`로 수동 실행 가능
+- `ui-designer`는 `/ui-designer-ui-analyze`, `/ui-designer-ui-design`, `/ui-designer-ui-validate`, `/ui-designer-ui-qa`까지 로컬 프롬프트로 설치됨
+- Codex 자동화 검증은 `.claude/plugins/local/ui-designer/scripts/validate-plugin.sh`, `qa-plugin.sh` 경로를 기준으로 재현 가능
